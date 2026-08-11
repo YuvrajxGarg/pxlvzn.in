@@ -1,8 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <!-- PXLVZN mark: the pixel eye — a vision for pixels -->
   <rect width="16" height="16" fill="#060606"/>
-  <rect x="2" y="2" width="4" height="4" fill="#c8ff00"/>
-  <rect x="10" y="2" width="4" height="4" fill="#2a2a2a"/>
-  <rect x="6" y="6" width="4" height="4" fill="#ff3df5"/>
-  <rect x="2" y="10" width="4" height="4" fill="#2a2a2a"/>
-  <rect x="10" y="10" width="4" height="4" fill="#24e0ff"/>
+  <!-- top lid -->
+  <rect x="4" y="4" width="8" height="2" fill="#eaeaea"/>
+  <!-- side corners -->
+  <rect x="2" y="6" width="2" height="4" fill="#eaeaea"/>
+  <rect x="12" y="6" width="2" height="4" fill="#eaeaea"/>
+  <!-- bottom lid -->
+  <rect x="4" y="10" width="8" height="2" fill="#eaeaea"/>
+  <!-- iris: volt 2x2 -->
+  <rect x="6" y="6" width="4" height="4" fill="#c8ff00"/>
+  <!-- pupil -->
+  <rect x="8" y="8" width="2" height="2" fill="#060606"/>
+  <!-- glint -->
+  <rect x="6" y="6" width="2" height="2" fill="#ffffff"/>
 </svg>
