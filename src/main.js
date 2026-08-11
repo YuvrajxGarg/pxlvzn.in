@@ -11,6 +11,7 @@ import { drawThumbs } from './modules/thumbs.js';
 import { initFooter } from './modules/footer.js';
 import { initCRT } from './modules/crt.js';
 import { initMarquee } from './modules/marquee.js';
+import { initAudio } from './modules/audio.js';
 
 console.log(
   '%cPXLVZN %c— you opened the console. we like you already.\n' +
@@ -29,6 +30,7 @@ initTilt();
 initMagnetic();
 initCRT();
 initMarquee();
+initAudio();
 drawThumbs();
 
 runBoot().then(() => {

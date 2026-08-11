@@ -100,19 +100,37 @@ export async function initHero() {
     if (ray.ray.intersectPlane(plane, hit)) target.set(hit.x, hit.y);
   });
 
+  const halfHeight = cells.reduce((m, [, y]) => Math.max(m, Math.abs(y)), 0);
+
   function resize() {
     const w = canvas.clientWidth || innerWidth;
     const h = canvas.clientHeight || innerHeight;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    // dolly back until the word fits the viewport width, fog follows the camera
-    const fitZ = (halfWidth + 12) / (Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect);
-    camera.position.z = Math.max(fitZ * 1.08, 95);
+    const tan = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+
+    // the word must fit the width AND the band above the overlay copy —
+    // measure where the copy actually starts instead of guessing
+    const hero = canvas.parentElement;
+    const overlay = hero?.querySelector('.hero__overlay');
+    let bandFrac = 0.55; // fallback: word may use the top 55% of the hero
+    if (hero && overlay) {
+      const hr = hero.getBoundingClientRect();
+      const or = overlay.getBoundingClientRect();
+      bandFrac = Math.min(0.72, Math.max(0.3, (or.top - hr.top) / hr.height));
+    }
+    const topPad = 0.08;                       // breathing room under the nav
+    const availFrac = bandFrac - topPad - 0.04; // 4% gap above the copy
+    const fitZw = (halfWidth + 12) / (tan * camera.aspect);
+    const fitZh = (halfHeight + 4) / (tan * Math.max(availFrac, 0.15));
+    camera.position.z = Math.max(fitZw * 1.08, fitZh, 95);
     scene.fog.near = camera.position.z - 50;
     scene.fog.far = camera.position.z + 140;
-    // park the word's center at ~38% viewport height, clear of the copy below
-    const visibleH = 2 * camera.position.z * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-    mesh.position.y = visibleH * 0.12 + camera.position.y;
+
+    // center the word in the band between nav and copy
+    const visibleH = 2 * camera.position.z * tan;
+    const centerFrac = (topPad + bandFrac - 0.04) / 2; // 0 = top of viewport
+    mesh.position.y = camera.position.y + visibleH * (0.5 - centerFrac);
     camera.updateProjectionMatrix();
   }
   resize();
