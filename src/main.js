@@ -46,12 +46,26 @@ fetch(`https://api.github.com/repos/${REPO}/releases/latest`, { headers: { Accep
   .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
   .then((rel) => {
     const v = (rel.tag_name || "").replace(/^v/, "");
-    if (v) $$("[data-version]").forEach((el) => (el.textContent = "Version " + v));
+    if (v) $$("[data-version]").forEach((el) => (el.textContent = (el.closest(".mono") ? "v" : "Version ") + v));
     const notes = $("[data-notes]");
     if (notes && rel.html_url) notes.href = rel.html_url;
-    for (const a of rel.assets || []) {
+    const assets = rel.assets || [];
+    for (const a of assets) {
       if (a.name === "PXL-mac.zip") $$('[data-size="mac"]').forEach((el) => (el.textContent = size(a.size)));
       if (a.name === "PXL-windows.zip") $$('[data-size="windows"]').forEach((el) => (el.textContent = size(a.size)));
+    }
+    // A release can go out before its Windows build finishes: point Windows buttons at the
+    // release page instead of a file that isn't there yet.
+    if (!assets.some((a) => a.name === "PXL-windows.zip")) {
+      const page = rel.html_url || `https://github.com/${REPO}/releases/latest`;
+      $$('[data-dl="windows"]').forEach((el) => {
+        el.href = page;
+        el.lastChild.textContent = "";
+        el.querySelector(".sub").textContent = "";
+        el.childNodes.forEach((n) => { if (n.nodeType === 3) n.textContent = ""; });
+        el.insertAdjacentText("beforeend", "Windows build on the way");
+      });
+      if (isWin) setBtn(main, "#windows", "Windows build on the way", page);
     }
   })
   .catch(() => { /* the static links still work */ });
