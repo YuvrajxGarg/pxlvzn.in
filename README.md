@@ -1,13 +1,6 @@
-# PXLVZN — a vision for pixels
+# pxlvzn.in
 
-The home of everything PXLVZN ships: tools, toys, games, experiments.
-Currently in larval stage. It bites anyway.
-
-## Stack
-
-- [Vite](https://vitejs.dev) — dev server + build
-- [three.js](https://threejs.org) — the hero voxel wordmark (one InstancedMesh, one draw call)
-- Vanilla JS + Canvas 2D for everything else. No UI framework, no template.
+The home of PXLVZN and of **PXL**, the app that installs, opens and updates every PXLVZN app (Dwn, Tag and whatever comes next). Same design language as the apps and as [dwn.pxlvzn.in](https://dwn.pxlvzn.in): near-black surfaces, hairline strokes, white primary actions and one lime accent.
 
 ## Run it
 
@@ -21,25 +14,11 @@ npm run build    # production build → dist/
 
 | Path | What |
 |---|---|
-| `index.html` | all content + copy |
-| `src/styles/main.css` | design system — the pixel (8px) is the unit |
-| `src/modules/hero3d.js` | 3D voxel wordmark, cursor repulsion |
-| `src/modules/boot.js` | fake BIOS boot (once per session, any key skips) |
-| `src/modules/lab.js` | live experiments: Game of Life, pixel rain, dither field |
-| `src/modules/thumbs.js` | procedural thumbnails per tool — no stock art, ever |
-| `src/modules/footer.js` | giant pixel wordmark, ripples under the cursor |
-| `src/modules/crt.js` | CRT mode — nav button or ↑↑↓↓←→←→BA |
-| `src/modules/*` | cursor, scramble text, reveals, tilt/magnetic, statusbar, marquee |
+| `index.html` | all content and copy |
+| `src/style.css` | styles, shared with the Dwn site plus the PXL additions at the end |
+| `src/main.js` | download buttons for the visitor's OS, latest PXL version, app list, screenshot switch, hero pixel wave |
+| `public/shots/` | PXL screenshots (rendered from the app's `index.html?demo&still` UI preview) |
 
-## Adding a tool to the registry
+## The app list
 
-1. Copy a `<article class="pkg">` block in `index.html`.
-2. Give its `<canvas class="pkg__thumb">` a new `data-gen` name.
-3. Add a matching generator in `src/modules/thumbs.js`.
-4. Bump `#pkg-count`.
-
-## House rules
-
-- Every pixel on purpose.
-- 60fps or we riot (all canvases pause off-screen via IntersectionObserver).
-- `prefers-reduced-motion` is respected.
+The **Apps** section reads [`apps.json`](https://github.com/YuvrajxGarg/pxl/blob/main/apps.json) from the PXL repository, the same file the app reads. Adding an app there updates the site and every copy of PXL at once. The cards in `index.html` are only the fallback for when GitHub can't be reached.
