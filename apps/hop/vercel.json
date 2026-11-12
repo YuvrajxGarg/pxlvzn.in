@@ -2,11 +2,47 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
-    { "source": "/assets/(.*)\\.(png|jpg|svg|ico)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }] },
-    { "source": "/assets/(.*)\\.(css|js)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }] },
-    { "source": "/(.*)", "headers": [
-      { "key": "X-Content-Type-Options", "value": "nosniff" },
-      { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
-    ] }
-  ]
+    {
+      "source": "/assets/(.*)\\.(png|jpg|svg|ico)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)\\.(css|js)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/hop/sweep",
+      "schedule": "17 3 * * *"
+    }
+  ],
+  "functions": {
+    "api/hop/[op].js": {
+      "maxDuration": 30
+    }
+  }
 }
