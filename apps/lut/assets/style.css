@@ -449,7 +449,20 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
 /* Syn: "syn" followed by a lime sync link: two dots, one per track, joined by a line where the
    tracks line up. Static version used in nav, footer and icons (matches the app's .mark). */
 .synw { position: relative; display: inline-flex; align-items: baseline; }
-.synw .link { position: relative; display: inline-block; flex: none; width: 0.17em; height: 0.56em; margin-left: 0.09em; }
+.synw .link { position: relative; display: inline-block; flex: none; width: 0.17em; height: 1ex; margin-left: 0.09em; }
+.synw .bl { display: inline-block; width: 0; height: 0; }
+/* The static mark everywhere else is the outlined brand SVG (viewBox in 2048-unit em: top 1159 above
+   the baseline, 500 below, 82 of padding on the left). Sized and offset so its baseline sits on the text's. */
+.wordmark img.synmark, .hero-mark img.rest { display: block; height: 0.81em; width: auto; max-width: none; }
+.wordmark img.synmark { margin: 0 0 -0.244em -0.04em; }
+/* Hero: the live-text intro plays, then cross-fades into the SVG, which main.js lines up on the
+   intro's baseline (so the resting mark is the same as the app's and the panel's). */
+.hero-mark.anim-syn { position: relative; }
+.hero-mark img.rest { position: absolute; left: -0.04em; top: 0; opacity: 0; pointer-events: none; }
+.ready .anim-syn.placed img.rest { animation: syn-rest 0.35s ease 1.8s forwards; }
+.ready .anim-syn.placed .synw { animation: syn-text-out 0.35s ease 1.8s forwards; }
+@keyframes syn-rest { to { opacity: 1; } }
+@keyframes syn-text-out { to { opacity: 0; } }
 .synw .link b { position: absolute; left: 0; width: 0.17em; height: 0.17em; border-radius: 50%; background: var(--accent); }
 .synw .link b:first-child { top: 0; --dx: 0.55em; }
 .synw .link b:last-child { bottom: 0; --dx: 0.24em; }
@@ -491,6 +504,7 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
   .anim-tag .strike { transform: none; } .anim-tag * { animation: none !important; }
   .shots .after, .shots .tag { animation: none !important; } .shots .tag.r { opacity: 0; }
   .anim-syn .ch, .anim-syn .link b, .anim-syn .link i { opacity: 1; transform: none; }
+  .anim-syn.placed img.rest { opacity: 1; } .anim-syn.placed .synw { opacity: 0; }
   .syn-tl * { animation: none !important; }
   .anim-lut *, .anim-lut .lutw, .anim-stm *, .anim-hop *, .anim-syn * { animation: none !important; }
 }

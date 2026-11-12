@@ -422,7 +422,7 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
 .tile .mk .go { display: inline-block; flex: none; width: 0.46em; height: 0.46em; margin-left: 0.04em;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2.46 -2.46 100 100'%3E%3Cpath transform='rotate(45 50 50)' fill='%23ccff4d' d='M33 46V83A17 17 0 0 0 67 83V46H98L50 -14L2 46Z'/%3E%3C/svg%3E") center/contain no-repeat; }
 /* Syn: a lime sync link, two dots (one per track) joined where they line up. */
-.tile .mk .link { position: relative; display: inline-block; flex: none; width: .17em; height: .56em; margin-left: .09em; }
+.tile .mk .link { position: relative; display: inline-block; flex: none; width: .17em; height: 1ex; margin-left: .09em; }
 .tile .mk .link b { position: absolute; left: 0; width: .17em; height: .17em; border-radius: 50%; background: var(--accent); }
 .tile .mk .link b:first-child { top: 0; } .tile .mk .link b:last-child { bottom: 0; }
 .tile .mk .link i { position: absolute; left: 50%; top: .085em; bottom: .085em; width: .062em; margin-left: -.031em; border-radius: .031em; background: var(--accent); }
