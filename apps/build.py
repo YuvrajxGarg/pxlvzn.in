@@ -21,7 +21,7 @@ SHARED = HERE / "_shared"
 ASSET_VERSION = "1"  # bump to make browsers refetch style.css and main.js
 
 GLYPHS = {
-    "stems": '<i class="g g-stems" aria-hidden="true"><b></b><b></b><b></b><b></b></i>',
+    "stems": '<i class="g g-stems" aria-hidden="true"></i>',
     "cube": '<i class="g g-cube" aria-hidden="true"></i>',
     "hop": '<i class="g g-hop" aria-hidden="true"></i>',
 }

@@ -12,7 +12,7 @@ const path = require("path");
 const HERE = __dirname;
 const CSS = fs.readFileSync(path.join(HERE, "_shared", "style.css"), "utf8");
 const APPS = {
-  stm: { glyph: '<i class="g g-stems"><b></b><b></b><b></b><b></b></i>', tagline: "Split any song into its stems." },
+  stm: { glyph: '<i class="g g-stems"></i>', tagline: "Split any song into its stems." },
   lut: { glyph: '<i class="g g-cube"></i>', tagline: "Match the colour of one shot to another." },
   hop: { glyph: '<i class="g g-hop"></i>', tagline: "Send files between your devices. No cloud." },
 };

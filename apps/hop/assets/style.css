@@ -54,11 +54,12 @@ img { display: block; max-width: 100%; height: auto; }
 .wordmark svg { width: 0.36em; height: 0.56em; fill: var(--accent); flex: none; }
 /* Each app's glyph after its three letters, as in the PXL app tiles. */
 .wordmark .g { display: inline-block; flex: none; }
-/* Empty blocks, no flex: an inline-block with no text sits its bottom on the baseline. */
-.g-stems { width: 0.3em; height: 0.56em; padding-top: 0.125em; margin-left: 0.04em; box-sizing: border-box; }
-.g-stems b { display: block; height: 0.075em; margin-top: 0.045em; border-radius: 0.04em; background: var(--accent); }
-.g-stems b:first-child { margin-top: 0; }
-.g-stems b:nth-child(1) { width: 100%; } .g-stems b:nth-child(2) { width: 62%; } .g-stems b:nth-child(3) { width: 84%; } .g-stems b:nth-child(4) { width: 46%; }
+/* Stm: four level bars side by side, bottom-aligned, heights 55/100/35/75% of the x-height
+   (matches the app's .mark .bars). Drawn as backgrounds so the empty inline-block sits on the baseline. */
+.g-stems { width: 0.36em; height: 0.53em; margin-left: 0.05em; background-repeat: no-repeat;
+  background-image: linear-gradient(var(--accent), var(--accent)), linear-gradient(var(--accent), var(--accent)), linear-gradient(var(--accent), var(--accent)), linear-gradient(var(--accent), var(--accent));
+  background-size: 0.066em 55%, 0.066em 100%, 0.066em 35%, 0.066em 75%;
+  background-position: 0 100%, 33.3% 100%, 66.6% 100%, 100% 100%; }
 .g-cube { width: 0.22em; height: 0.22em; border-radius: 0.03em; background: linear-gradient(135deg, #ffb35c, var(--accent) 55%, #4dd8ff); }
 .g-hop { width: 0.4em; height: 0.56em; position: relative; }
 .g-hop::before { content: ""; position: absolute; left: 0; right: 0; top: 0.08em; height: 0.36em; border: 0.055em solid var(--accent); border-bottom: 0; border-radius: 0.4em 0.4em 0 0; border-style: dashed; opacity: .55; }
