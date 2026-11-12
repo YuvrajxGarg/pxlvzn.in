@@ -1,5 +1,6 @@
 """Builds the websites for the newer PXLVZN apps, one static site per subdomain:
 
+    tag.pxlvzn.in   apps/tag/
     stm.pxlvzn.in   apps/stm/
     lut.pxlvzn.in   apps/lut/
     hop.pxlvzn.in   apps/hop/
@@ -19,10 +20,11 @@ import shutil
 
 HERE = pathlib.Path(__file__).resolve().parent
 SHARED = HERE / "_shared"
-ASSET_VERSION = "4"  # bump to make browsers refetch style.css and main.js
+ASSET_VERSION = "5"  # bump to make browsers refetch style.css and main.js
 
 GLYPHS = {
     "stems": '<i class="g g-stems" aria-hidden="true"></i>',
+    "strike": "",
     "cube": "",
     "hop": "",
 }
@@ -167,18 +169,18 @@ PAGE = """<!doctype html>
         <div class="platforms">
           <div class="platform" data-platform="mac">
             <header><svg><use href="#apple"/></svg><div><h3>macOS</h3><small>{mac_req}</small></div></header>
-            <a class="btn btn-primary" data-dl="mac" href="https://github.com/YuvrajxGarg/{id}/releases/latest"><svg><use href="#down"/></svg><span class="not-soon">Download for Mac</span><span class="soon">Coming soon</span> <span class="sub" data-size="mac"></span></a>
-            <p class="note" data-note="mac">Unzip and move <b>{name}</b> to Applications. The first time, right-click it and choose <b>Open</b>.</p>
+            <a class="btn btn-primary" data-dl="mac" href="{mac_url}"><svg><use href="#down"/></svg><span class="not-soon">Download for Mac</span><span class="soon">Coming soon</span> <span class="sub" data-size="mac"></span></a>
+            <p class="note" data-note="mac">{mac_note}</p>
           </div>
           <div class="platform" data-platform="windows">
             <header><svg><use href="#windows"/></svg><div><h3>Windows</h3><small>Windows 10 or 11 · 64-bit</small></div></header>
-            <a class="btn btn-quiet" data-dl="windows" href="https://github.com/YuvrajxGarg/{id}/releases/latest"><svg><use href="#down"/></svg><span class="not-soon">Download for Windows</span><span class="soon">Coming soon</span> <span class="sub" data-size="windows"></span></a>
-            <p class="note" data-note="windows">Run it. If SmartScreen appears, click <b>More info</b>, then <b>Run anyway</b>.</p>
+            <a class="btn btn-quiet" data-dl="windows" href="{win_url}"><svg><use href="#down"/></svg><span class="not-soon">Download for Windows</span><span class="soon">Coming soon</span> <span class="sub" data-size="windows"></span></a>
+            <p class="note" data-note="windows">{win_note}</p>
           </div>
         </div>
         <div class="pxl-note">
           <span class="pm">pxl<i></i></span>
-          <p>{name} is part of <a href="https://pxlvzn.in">PXL</a>, the free app that installs, opens and updates every PXLVZN app, including <a href="https://dwn.pxlvzn.in">Dwn</a>, Tag, Stm, Lut and Hop. Already have PXL? {name} shows up in its app list once it is released.</p>
+          <p>{name} is part of <a href="https://pxlvzn.in">PXL</a>, the free app that installs, opens and updates every PXLVZN app, including <a href="https://dwn.pxlvzn.in">Dwn</a>, <a href="https://tag.pxlvzn.in">Tag</a>, Stm, Lut and Hop. Already have PXL? {name} shows up in its app list once it is released.</p>
         </div>
         <p class="meta" style="margin-top:26px"><a href="https://github.com/YuvrajxGarg/{id}/releases" data-notes>Release notes</a> · <a href="https://github.com/YuvrajxGarg/{id}">Source code</a></p>
       </div>
@@ -274,6 +276,15 @@ def wave(seed, n=72):
     return "".join(out)
 
 
+# ------------------------------------------------------------------------- Tag
+# Tag has a real UI, so its hero shows the app's own screenshots (from the tag repo's docs/,
+# cropped to the window): the scan, then the same batch cleaned, every tag struck through.
+TAG_DEMO = """          <div class="shots">
+            <img src="/assets/scan.jpg" width="1536" height="949" alt="">
+            <img class="after" src="/assets/clean.jpg" width="1536" height="949" alt="" loading="lazy">
+            <span class="tag l">Scanned</span><span class="tag r">Cleaned</span>
+          </div>"""
+
 # ------------------------------------------------------------------------- Stm
 STM_DEMO = f"""          <div class="bar"><i></i><i></i><i></i><span>Stm</span><span class="r">htdemucs · CoreML</span></div>
           <div class="body">
@@ -317,6 +328,39 @@ HOP_DEMO = """          <div class="bar"><i></i><i></i><i></i><span>Hop</span><s
           </div>"""
 
 APPS = [
+    dict(
+        id="tag", name="Tag", glyph="strike",
+        tagline="Take the AI tags off your photos and videos.",
+        tagline_html='<span class="t-thin">Take the AI tags off</span> <span class="t-bold">your photos and videos.</span>',
+        description="Tag is a free app for Mac and Windows that strips C2PA Content Credentials, made-with-AI labels and generator metadata from photos and videos. Lossless: nothing is re-encoded and your originals are never touched.",
+        og="Strips C2PA, made-with-AI labels and generator metadata. Lossless, on your own computer. Free for Mac and Windows.",
+        lede="AI tools stamp their output with metadata, and platforms read it. Used AI for one VFX pass, a cleanup or an extend? Tag removes those stamps from your photos and videos without touching a single pixel, on your own computer.",
+        os_line="macOS and Windows",
+        demo=TAG_DEMO, demo_label="Tag scanning five files and finding AI tags from Adobe Firefly, Higgsfield and C2PA, then the same batch cleaned with every tag struck through.",
+        caption="Drop a batch. See every tag. Clean them all, losslessly.",
+        features_title='Every tag found. <span class="thin">Every pixel kept.</span>',
+        features_lede="Tag rewrites the file's wrapper, not its picture. What you made stays exactly as you made it.",
+        cards=[
+            card("span-3 wide", "eye", "Sees every tag", "C2PA Content Credentials, IPTC &ldquo;made with AI&rdquo; labels, XMP edit history and the generator stamps from the tools you use.", '<div class="chips" aria-label="Recognises"><span class="chip on">Higgsfield</span><span class="chip on">Firefly</span><span class="chip on">OpenAI</span><span class="chip on">Midjourney</span><span class="chip">Runway</span><span class="chip">Kling</span></div>', lime=True),
+            card("span-3 wide", "check", "Lossless, bit for bit", "Images are rewritten at the container level and videos are remuxed with stream copy, so nothing is re-encoded. Colour profiles, orientation, transparency and HDR stay put."),
+            card("span-2", "file", "Photos and videos", "JPG, PNG, WebP, MP4, MOV, MKV and WebM. Drop hundreds of files or a whole folder at once."),
+            card("span-2", "layers", "Originals untouched", "Clean copies go to a cleaned folder beside each file, or anywhere you choose. The originals are never modified."),
+            card("span-2", "term", "And a CLI", "Clean a whole export folder from a script.", '<div class="term"><span class="p">$</span> Tag clean ./exports</div>'),
+        ],
+        how_title='Drop, see, clean. <span class="thin">That&rsquo;s it.</span>',
+        how_lede="No settings to learn. ffmpeg comes bundled, so there's nothing else to install.",
+        steps=[step("Drop files", "Drag photos, videos or whole folders onto the window."),
+               step("See the tags", "Each file lists what it carries: Firefly, Higgsfield, C2PA manifests, IPTC AI labels and more."),
+               step("Clean", "Tag writes clean copies and strikes through every tag it removed.")],
+        private_lede="Tag never uploads your files. It reads and rewrites them on your own machine, so unreleased work stays unreleased.",
+        servers_line="Files are cleaned on your machine. They never leave it.",
+        mac_req="macOS 11 or later · Apple silicon",
+        mac_url="https://github.com/YuvrajxGarg/tag/releases/latest/download/Tag.dmg",
+        win_url="https://github.com/YuvrajxGarg/tag/releases/latest/download/Tag-Setup.exe",
+        mac_note="Open it and drag <b>Tag</b> to Applications. The first time, right-click it and choose <b>Open</b>.",
+        win_note="Run the setup. It adds Tag to the Start menu. If SmartScreen appears, click <b>More info</b>, then <b>Run anyway</b>.",
+        fine="Tag removes metadata, not watermarks hidden in the pixels such as SynthID. Disclose AI use where a platform asks you to.",
+    ),
     dict(
         id="stm", name="Stm", glyph="stems",
         tagline="Split any song into its stems.",
@@ -412,9 +456,13 @@ APPS = [
 LUT_MARK = ('<span class="lutw"><span class="base">lut</span><span class="lime" aria-hidden="true">lut</span>'
             '<i class="gbar" aria-hidden="true"></i></span>')
 HOP_MARK = '<span class="hopw">hop<i class="go" aria-hidden="true"></i></span>'
-MARKS = {"lut": LUT_MARK, "hop": HOP_MARK}
+TAG_MARK = '<span class="tagw">tag<i class="strike" aria-hidden="true"></i></span>'
+MARKS = {"tag": TAG_MARK, "lut": LUT_MARK, "hop": HOP_MARK}
 
 HERO_MARKS = {
+    "tag": ('<div class="hero-mark wordmark anim-tag" aria-hidden="true"><span class="tagw">'
+            '<span class="ch">t</span><span class="ch">a</span><span class="ch">g</span>'
+            '<i class="strike"></i></span></div>'),
     "stm": ('<div class="hero-mark wordmark anim-stm" aria-hidden="true"><span class="stmw">'
             '<span class="ch">s</span><span class="ch">t</span><span class="ch">m</span>'
             '<i class="bars"><b></b><b></b><b></b><b></b></i></span></div>'),
@@ -441,7 +489,12 @@ def build(app):
     glyph = GLYPHS[app["glyph"]]
     plain = html.unescape(app["tagline"]).rstrip(".")
     mark = MARKS.get(app["id"], app["id"] + glyph)
-    fields = dict(app, v=ASSET_VERSION, icons=ICONS, glyph=glyph, mark=mark, tagline_plain=html.escape(plain),
+    rel = f"https://github.com/YuvrajxGarg/{app['id']}/releases/latest"
+    defaults = dict(mac_url=rel, win_url=rel,
+                    mac_note="Unzip and move <b>{0}</b> to Applications. The first time, right-click it and choose <b>Open</b>.".format(app["name"]),
+                    win_note="Run it. If SmartScreen appears, click <b>More info</b>, then <b>Run anyway</b>.")
+    fields = dict(defaults, **app)
+    fields.update(v=ASSET_VERSION, icons=ICONS, glyph=glyph, mark=mark, tagline_plain=html.escape(plain),
                   hero_mark=hero_mark(app, glyph),
                   cards="\n".join(app["cards"]), steps="\n".join(app["steps"]),
                   description=html.escape(app["description"], quote=True), og=html.escape(app["og"], quote=True))

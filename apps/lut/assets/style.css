@@ -387,6 +387,20 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
 @keyframes lut-glow { 0% { box-shadow: 0 0 0 0.045em var(--knock), 0 0 0.5em var(--accent); } 100% { box-shadow: 0 0 0 0.045em var(--knock), 0 0 0 transparent; } }
 .no-js .anim-lut .lutw { --x: 57%; } .no-js .anim-lut .base b { opacity: 1; font-weight: 900; } .no-js .anim-lut .gbar, .no-js .anim-lut .lime { opacity: 1; }
 
+/* Tag: "tag" with a lime strike through it, with a dark gap knocked out around the strike
+   (matches the app's .mark .strike). */
+.tagw { position: relative; display: inline-block; padding-right: 0.055em; --knock: var(--bg); }
+.tagw .strike { position: absolute; left: -0.1em; right: -0.08em; top: 0.53em; height: 0.13em; border-radius: 0.1em;
+  background: var(--accent); box-shadow: 0 0 0 0.05em var(--knock); }
+.nav .tagw { --knock: #0e0e0f; }
+
+/* Tag intro, as in the app's splash: the letters rise out of a blur, then the strike swipes
+   through them from the left, the way Tag strikes out each tag it removes. */
+.anim-tag .strike { transform: scaleX(0); transform-origin: left; }
+.ready .anim-tag .strike { animation: tag-swipe 0.5s cubic-bezier(.6, 0, .2, 1) 0.6s forwards; }
+@keyframes tag-swipe { to { transform: none; } }
+.no-js .anim-tag .ch { opacity: 1; } .no-js .anim-tag .strike { transform: none; }
+
 /* Stm: "stm" plus four lime track lines. Static version is .g-stems above. */
 .stmw { display: inline-flex; align-items: baseline; }
 .stmw .bars { display: inline-block; width: 0.5em; margin-left: 0.08em; vertical-align: baseline; }
@@ -436,6 +450,8 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
   .anim-lut .lutw { --x: 57%; } .anim-lut .base b { opacity: 1; font-weight: 900; } .anim-lut .gbar, .anim-lut .lime { opacity: 1; }
   .anim-stm .bars b { opacity: 1; transform: none; }
   .anim-hop .ch, .anim-hop .go { opacity: 1; transform: none; } .anim-hop .streak { display: none; }
+  .anim-tag .strike { transform: none; } .anim-tag * { animation: none !important; }
+  .shots .after, .shots .tag { animation: none !important; } .shots .tag.r { opacity: 0; }
   .anim-lut *, .anim-lut .lutw, .anim-stm *, .anim-hop * { animation: none !important; }
 }
 
@@ -461,6 +477,18 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
 .drop b { color: var(--text); font-weight: 600; }
 .drop small { display: block; color: var(--text3); font-size: 12.5px; margin-top: 2px; }
 .drop .go { margin-left: auto; }
+
+/* Tag: the app's own screenshots, the scan then the cleaned batch, crossfading. */
+.shots { position: relative; aspect-ratio: 1536 / 949; background: #0b0b0c; }
+.shots img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.shots .after { opacity: 0; }
+.shots .tag { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); padding: 6px 12px; border-radius: 8px;
+  background: rgba(0, 0, 0, .6); font: 600 12px/1 var(--font); color: #fff; backdrop-filter: blur(6px); }
+.shots .tag.r { color: var(--accent); opacity: 0; }
+.ready .shots .after, .ready .shots .tag.r { animation: shot-swap 9s ease-in-out 1.5s infinite; }
+.ready .shots .tag.l { animation: shot-swap-out 9s ease-in-out 1.5s infinite; }
+@keyframes shot-swap { 0%, 40% { opacity: 0; } 50%, 90% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes shot-swap-out { 0%, 40% { opacity: 1; } 50%, 90% { opacity: 0; } 100% { opacity: 1; } }
 
 /* Stm: four stem lanes */
 .lanes { margin-top: 16px; display: grid; gap: 8px; }
