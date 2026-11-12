@@ -784,8 +784,8 @@ footer .fine { font-family: var(--mono); font-size: 11.5px; }
    heights, the screensaver's wall in miniature, at letter height. The gaps are set from the
    glyphs' ink (the p's bowl overhangs its box; the n has a side bearing), so they look equal. */
 .pinw { position: relative; display: inline-block; white-space: nowrap; }
-.pinw .mi { display: inline-block; height: .53em; width: .36em; margin: 0 .05em 0 .12em; overflow: hidden; line-height: 0; white-space: nowrap; }
-.pinw .mi .c { display: inline-flex; vertical-align: top; flex-direction: column; gap: .045em; height: 100%; width: .09em; margin-right: .045em; }
+.pinw .mi { display: inline-block; height: .53em; width: .44em; margin: 0 .05em 0 .12em; overflow: hidden; line-height: 0; white-space: nowrap; }
+.pinw .mi .c { display: inline-flex; vertical-align: top; flex-direction: column; gap: .045em; height: 100%; width: .1167em; margin-right: .045em; }
 .pinw .mi .c:last-child { margin-right: 0; }
 .pinw .mi b { display: block; flex: none; background: var(--accent); border-radius: .03em; }
 .pinw .mi .c b:last-child { flex: 1; }
@@ -804,8 +804,8 @@ footer .fine { font-family: var(--mono); font-size: 11.5px; }
 .anim-pin .mi .c:nth-child(1) { --d: 1.15s; } .anim-pin .mi .c:nth-child(2) { --d: 0.85s; } .anim-pin .mi .c:nth-child(3) { --d: 1.35s; }
 @keyframes pin-scroll-in { to { transform: none; } }
 .no-js .anim-pin .ch { opacity: 1; } .no-js .anim-pin .mi .c { transform: none; }
-.tile .mk .mi { display: inline-block; height: .53em; width: .36em; margin: 0 .05em 0 .12em; overflow: hidden; line-height: 0; white-space: nowrap; }
-.tile .mk .mi .c { display: inline-flex; vertical-align: top; flex-direction: column; gap: .045em; height: 100%; width: .09em; margin-right: .045em; }
+.tile .mk .mi { display: inline-block; height: .53em; width: .44em; margin: 0 .05em 0 .12em; overflow: hidden; line-height: 0; white-space: nowrap; }
+.tile .mk .mi .c { display: inline-flex; vertical-align: top; flex-direction: column; gap: .045em; height: 100%; width: .1167em; margin-right: .045em; }
 .tile .mk .mi .c:last-child { margin-right: 0; }
 .tile .mk .mi b { display: block; flex: none; background: var(--accent); border-radius: .03em; }
 .tile .mk .mi .c b:last-child { flex: 1; }
