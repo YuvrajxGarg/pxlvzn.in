@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pin — Your Pinterest feed, as a screensaver</title>
+<meta name="description" content="Pin is a free screensaver for Mac and Windows that fills your screen with a slowly scrolling wall of pins from your Pinterest home feed or any public board, plus an app to see, save and hide them.">
+<meta name="theme-color" content="#0b0b0c">
+<link rel="canonical" href="https://pin.pxlvzn.in/">
+<link rel="icon" type="image/png" href="/assets/icon.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pin.pxlvzn.in/">
+<meta property="og:title" content="Pin — Your Pinterest feed, as a screensaver">
+<meta property="og:description" content="A slowly scrolling wall of your pins whenever your computer idles, and an app to save or hide them. Free for Mac and Windows.">
+<meta property="og:image" content="https://pin.pxlvzn.in/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&family=Inter+Tight:wght@100..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css?v=8">
+<script>document.documentElement.classList.replace("no-js", "js-anim")</script>
+</head>
+<body data-repo="YuvrajxGarg/pin">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="apple" viewBox="0 0 24 24"><path fill="currentColor" d="M16.37 12.6c.02 2.6 2.28 3.46 2.3 3.47-.02.06-.36 1.24-1.19 2.45-.72 1.05-1.46 2.09-2.63 2.11-1.15.02-1.52-.68-2.83-.68-1.32 0-1.73.66-2.82.7-1.13.04-1.99-1.13-2.71-2.18-1.48-2.13-2.61-6.03-1.09-8.66.75-1.31 2.1-2.13 3.56-2.15 1.11-.02 2.16.75 2.83.75.68 0 1.95-.93 3.29-.79.56.02 2.13.23 3.14 1.7-.08.05-1.87 1.1-1.85 3.28M14.2 5.2c.6-.73 1-1.73.89-2.74-.86.04-1.9.58-2.52 1.3-.55.64-1.04 1.66-.91 2.64.96.07 1.94-.49 2.54-1.2"/></symbol>
+  <symbol id="windows" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5.1 10.4 4v7.2H3zm8.3-1.2L21 2.5v8.7h-9.7zM3 12.2h7.4v7.2L3 18.3zm8.3 0H21v8.7l-9.7-1.4z"/></symbol>
+  <symbol id="github" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2"/></symbol>
+  <symbol id="down" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M12 4v13m0 0-5.5-5.5M12 17l5.5-5.5M5 20h14"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="file" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></g></symbol>
+  <symbol id="music" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></g></symbol>
+  <symbol id="bolt" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M13 3 5 14h6l-1 7 8-11h-6z"/></symbol>
+  <symbol id="lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></g></symbol>
+  <symbol id="term" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 7 5 5-5 5M12 17h7"/></g></symbol>
+  <symbol id="layers" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></g></symbol>
+  <symbol id="cube" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></g></symbol>
+  <symbol id="eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></g></symbol>
+  <symbol id="wifi" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r=".6"/></g></symbol>
+  <symbol id="qr" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v7h-4M14 18v3"/></g></symbol>
+  <symbol id="resume" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4L21 8"/><path d="M21 3v5h-5"/></g></symbol>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a href="/" class="wordmark" aria-label="Pin home"><span class="pinw">p<span class="pi">ı<i class="head" aria-hidden="true"></i></span>n</span></a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#private">Privacy</a>
+    </nav>
+    <div class="nav-right">
+      <a class="icon-link" href="https://github.com/YuvrajxGarg/pin" aria-label="Pin on GitHub"><svg><use href="#github"/></svg></a>
+      <a class="btn btn-primary btn-sm" href="#download"><svg><use href="#down"/></svg>Download</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <a class="pill" href="https://pxlvzn.in"><span class="dot"></span><b>New</b> in the PXL suite</a>
+
+      <div class="hero-mark wordmark anim-pin" aria-hidden="true"><span class="pinw"><span class="ch">p</span><span class="ch pi">ı<i class="ripple"></i><i class="head"></i></span><span class="ch">n</span></span></div>
+
+      <h1 class="tagline"><span class="t-thin">Your Pinterest feed,</span> <span class="t-bold">as a screensaver.</span></h1>
+      <p class="lede">When your computer idles, Pin fills the screen with a slow, drifting wall of pins from your home feed or any public board. The Pin app shows every pin it has, saves the ones you love as images, and hides the ones you never want to see again.</p>
+
+      <div class="cta">
+        <a class="btn btn-primary btn-lg" id="cta-main" href="#download">
+          <svg><use href="#apple"/></svg><span>Download for Mac</span>
+        </a>
+        <a class="btn btn-quiet btn-lg" id="cta-alt" href="#download">
+          <svg><use href="#windows"/></svg><span>Windows</span>
+        </a>
+      </div>
+      <p class="meta"><span class="not-soon" data-version>Latest version</span><span class="soon">First release coming soon</span> · Free and <a href="https://github.com/YuvrajxGarg/pin">open source</a> · macOS and Windows</p>
+
+      <div class="showcase">
+        <div class="demo" role="img" aria-label="A screensaver of pin images in five masonry columns drifting upward at different speeds, with a clock in the corner. One pin folds away as it is hidden.">
+          <div class="bar"><i></i><i></i><i></i><span>Pin</span><span class="r">Screensaver · your home feed · 186 pins</span></div>
+          <div class="body pin-wall">
+            <div class="pcol" style="--c:0"><div class="ptrack"><div class="pt s-circle" style="--a:#3a2f5c;--b:#c06c84;--r:1.5;--k:0"><i></i><b></b></div><div class="pt s-lines" style="--a:#1f3b4d;--b:#5fb3b3;--r:1.6;--k:1"><i></i><b></b></div><div class="pt s-blob" style="--a:#4a3b1f;--b:#e0a458;--r:1.78;--k:2"><i></i><b></b></div><div class="pt s-sun" style="--a:#2b3a2b;--b:#8fbf6a;--r:1.4;--k:3"><i></i><b></b></div><div class="pt s-bars" style="--a:#3d1f2b;--b:#e05a6b;--r:1.33;--k:4"><i></i><b></b></div><div class="pt s-arch" style="--a:#232946;--b:#b8c1ec;--r:1.7;--k:0"><i></i><b></b></div><div class="pt s-circle" style="--a:#3a2f5c;--b:#c06c84;--r:1.5;--k:0"><i></i><b></b></div><div class="pt s-lines" style="--a:#1f3b4d;--b:#5fb3b3;--r:1.6;--k:1"><i></i><b></b></div><div class="pt s-blob" style="--a:#4a3b1f;--b:#e0a458;--r:1.78;--k:2"><i></i><b></b></div><div class="pt s-sun" style="--a:#2b3a2b;--b:#8fbf6a;--r:1.4;--k:3"><i></i><b></b></div><div class="pt s-bars" style="--a:#3d1f2b;--b:#e05a6b;--r:1.33;--k:4"><i></i><b></b></div><div class="pt s-arch" style="--a:#232946;--b:#b8c1ec;--r:1.7;--k:0"><i></i><b></b></div></div></div>
+            <div class="pcol" style="--c:1"><div class="ptrack"><div class="pt s-arch" style="--a:#202a25;--b:#a3c9a8;--r:2.0;--k:1"><i></i><b></b></div><div class="pt s-circle" style="--a:#3a2f5c;--b:#c06c84;--r:1.5;--k:2"><i></i><b></b></div><div class="pt s-lines" style="--a:#1f3b4d;--b:#5fb3b3;--r:1.6;--k:3"><i></i><b></b></div><div class="pt s-blob" style="--a:#4a3b1f;--b:#e0a458;--r:1.78;--k:4"><i></i><b></b></div><div class="pt s-sun" style="--a:#2b3a2b;--b:#8fbf6a;--r:1.4;--k:0"><i></i><b></b></div><div class="pt s-bars" style="--a:#3d1f2b;--b:#e05a6b;--r:1.33;--k:1"><i></i><b></b></div><div class="pt s-arch" style="--a:#202a25;--b:#a3c9a8;--r:2.0;--k:1"><i></i><b></b></div><div class="pt s-circle" style="--a:#3a2f5c;--b:#c06c84;--r:1.5;--k:2"><i></i><b></b></div><div class="pt s-lines" style="--a:#1f3b4d;--b:#5fb3b3;--r:1.6;--k:3"><i></i><b></b></div><div class="pt s-blob" style="--a:#4a3b1f;--b:#e0a458;--r:1.78;--k:4"><i></i><b></b></div><div class="pt s-sun" style="--a:#2b3a2b;--b:#8fbf6a;--r:1.4;--k:0"><i></i><b></b></div><div class="pt s-bars" style="--a:#3d1f2b;--b:#e05a6b;--r:1.33;--k:1"><i></i><b></b></div></div></div>
+            <div class="pcol" style="--c:2"><div class="ptrack"><div class="pt s-bars" style="--a:#3b2a20;--b:#d9a066;--r:1.1;--k:2"><i></i><b></b></div><div class="pt s-arch" style="--a:#202a25;--b:#a3c9a8;--r:2.0;--k:3"><i></i><b></b></div><div class="pt s-circle hide" style="--a:#3a2f5c;--b:#c06c84;--r:1.5;--k:4"><i></i><b></b><span class=pt-x>Hidden</span></div><div class="pt s-lines" style="--a:#1f3b4d;--b:#5fb3b3;--r:1.6;--k:0"><i></i><b></b></div><div class="pt s-blob" style="--a:#4a3b1f;--b:#e0a458;--r:1.78;--k:1"><i></i><b></b></div><div class="pt s-sun" style="--a:#2b3a2b;--b:#8fbf6a;--r:1.4;--k:2"><i></i><b></b></div><div class="pt s-bars" style="--a:#3b2a20;--b:#d9a066;--r:1.1;--k:2"><i></i><b></b></div><div class="pt s-arch" style="--a:#202a25;--b:#a3c9a8;--r:2.0;--k:3"><i></i><b></b></div><div class="pt s-circle hide" style="--a:#3a2f5c;--b:#c06c84;--r:1.5;--k:4"><i></i><b></b><span class=pt-x>Hidden</span></div><div class="pt s-lines" style="--a:#1f3b4d;--b:#5fb3b3;--r:1.6;--k:0"><i></i><b></b></div><div class="pt s-blob" style="--a:#4a3b1f;--b:#e0a458;--r:1.78;--k:1"><i></i><b></b></div><div class="pt s-sun" style="--a:#2b3a2b;--b:#8fbf6a;--r:1.4;--k:2"><i></i><b></b></div></div></div>
+            <div class="pcol" style="--c:3"><div class="ptrack"><div class="pt s-sun" style="--a:#123;--b:#5f9ea0;--r:1.0;--k:3"><i></i><b></b></div><div class="pt s-bars" style="--a:#3b2a20;--b:#d9a066;--r:1.1;--k:4"><i></i><b></b></div><div class="pt s-arch" style="--a:#202a25;--b:#a3c9a8;--r:2.0;--k:0"><i></i><b></b></div><div class="pt s-circle" style="--a:#3a2f5c;--b:#c06c84;--r:1.5;--k:1"><i></i><b></b></div><div class="pt s-lines" style="--a:#1f3b4d;--b:#5fb3b3;--r:1.6;--k:2"><i></i><b></b></div><div class="pt s-blob" style="--a:#4a3b1f;--b:#e0a458;--r:1.78;--k:3"><i></i><b></b></div><div class="pt s-sun" style="--a:#123;--b:#5f9ea0;--r:1.0;--k:3"><i></i><b></b></div><div class="pt s-bars" style="--a:#3b2a20;--b:#d9a066;--r:1.1;--k:4"><i></i><b></b></div><div class="pt s-arch" style="--a:#202a25;--b:#a3c9a8;--r:2.0;--k:0"><i></i><b></b></div><div class="pt s-circle" style="--a:#3a2f5c;--b:#c06c84;--r:1.5;--k:1"><i></i><b></b></div><div class="pt s-lines" style="--a:#1f3b4d;--b:#5fb3b3;--r:1.6;--k:2"><i></i><b></b></div><div class="pt s-blob" style="--a:#4a3b1f;--b:#e0a458;--r:1.78;--k:3"><i></i><b></b></div></div></div>
+            <div class="pcol" style="--c:4"><div class="ptrack"><div class="pt s-blob" style="--a:#2a1f3d;--b:#9d7bd8;--r:1.25;--k:4"><i></i><b></b></div><div class="pt s-sun" style="--a:#123;--b:#5f9ea0;--r:1.0;--k:0"><i></i><b></b></div><div class="pt s-bars" style="--a:#3b2a20;--b:#d9a066;--r:1.1;--k:1"><i></i><b></b></div><div class="pt s-arch" style="--a:#202a25;--b:#a3c9a8;--r:2.0;--k:2"><i></i><b></b></div><div class="pt s-circle" style="--a:#3a2f5c;--b:#c06c84;--r:1.5;--k:3"><i></i><b></b></div><div class="pt s-lines" style="--a:#1f3b4d;--b:#5fb3b3;--r:1.6;--k:4"><i></i><b></b></div><div class="pt s-blob" style="--a:#2a1f3d;--b:#9d7bd8;--r:1.25;--k:4"><i></i><b></b></div><div class="pt s-sun" style="--a:#123;--b:#5f9ea0;--r:1.0;--k:0"><i></i><b></b></div><div class="pt s-bars" style="--a:#3b2a20;--b:#d9a066;--r:1.1;--k:1"><i></i><b></b></div><div class="pt s-arch" style="--a:#202a25;--b:#a3c9a8;--r:2.0;--k:2"><i></i><b></b></div><div class="pt s-circle" style="--a:#3a2f5c;--b:#c06c84;--r:1.5;--k:3"><i></i><b></b></div><div class="pt s-lines" style="--a:#1f3b4d;--b:#5fb3b3;--r:1.6;--k:4"><i></i><b></b></div></div></div>
+            <div class="pclock"><b>9:41</b><small>Thursday 12 November</small></div>
+          </div>
+        </div>
+        <p class="caption">Columns drift at their own pace, so the wall never looks like it's repeating.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="features">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="kicker">Features</div>
+        <h2>Your feed on the big screen. <span class="thin">On your terms.</span></h2>
+        <p class="section-lede">A screensaver that feels like scrolling Pinterest with your hands off the keyboard, and an app to curate it.</p>
+      </div>
+      <div class="bento">
+        <article class="card span-3 wide reveal">
+          <div class="ico lime"><svg><use href="#layers"/></svg></div>
+          <h3>A living wall of pins</h3>
+          <p>Masonry columns drift upward at slightly different speeds, pins recycle as they leave the top, and a new batch arrives every few minutes. Multiple displays get their own wall.</p><div class="chips" aria-label="Sources"><span class="chip on">Home feed</span><span class="chip on">Any profile</span><span class="chip on">Any board</span><span class="chip">Clock</span></div>
+        </article>
+        <article class="card span-3 wide reveal">
+          <div class="ico"><svg><use href="#eye"/></svg></div>
+          <h3>Hide what you don't want</h3>
+          <p>Hide a pin in the app and it never shows in the screensaver again, and isn't downloaded again either. Changed your mind? It's one click to bring it back.</p>
+        </article>
+        <article class="card span-2 reveal">
+          <div class="ico"><svg><use href="#down"/></svg></div>
+          <h3>Save the good ones</h3>
+          <p>Save any pin, or a whole selection, as a normal JPG or PNG. Or copy it straight to the clipboard.</p>
+        </article>
+        <article class="card span-2 reveal">
+          <div class="ico"><svg><use href="#resume"/></svg></div>
+          <h3>Refresh on demand</h3>
+          <p>Pull a fresh batch of pins whenever you like, or start over with an entirely new set.</p>
+        </article>
+        <article class="card span-2 reveal">
+          <div class="ico"><svg><use href="#bolt"/></svg></div>
+          <h3>Works offline</h3>
+          <p>Up to 200 pins are kept on disk, so the screensaver starts instantly, even without Wi-Fi.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="how">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="kicker">How it works</div>
+        <h2>Install it once. <span class="thin">Then just walk away.</span></h2>
+        <p class="section-lede">Pin sets up the screensaver for you and keeps it updated.</p>
+      </div>
+      <div class="steps3">
+        <div class="card reveal"><h3>Pick a source</h3><p>Your own home feed, or any public profile or board, like <code>nasa/space</code>.</p></div>
+        <div class="card reveal"><h3>Install the screensaver</h3><p>One click in Pin. It shows up in Screen Saver settings on Mac and Windows.</p></div>
+        <div class="card reveal"><h3>Curate</h3><p>Open Pin any time to save pins you love and hide the ones you don't.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="private">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="kicker">Private by design</div>
+        <h2>It runs on your computer. <span class="thin">That's it.</span></h2>
+        <p class="section-lede">Pin has no servers and no account of its own. Pins come straight from Pinterest to your computer, and your session cookie, if you use your home feed, never leaves it except to talk to pinterest.com.</p>
+      </div>
+      <div class="trio">
+        <div class="card reveal"><div class="big">0<span>.</span></div><h3>Accounts</h3><p>No sign-up, no email. Open it and go.</p></div>
+        <div class="card reveal"><div class="big">0<span>.</span></div><h3>Servers</h3><p>Pins download straight from Pinterest. Nothing of yours goes anywhere else.</p></div>
+        <div class="card reveal"><div class="big">0<span>.</span></div><h3>Trackers</h3><p>No analytics, no crash reporting, no ads. Ever.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="download" id="download">
+    <div class="wrap">
+      <div class="download-box reveal">
+        <div class="kicker">Download</div>
+        <h2>Get Pin. <span class="thin">It's free.</span></h2>
+        <p class="section-lede" style="margin-inline:auto"><span class="not-soon"><span data-version>The latest version</span>. It checks for updates and installs them with one click.</span><span class="soon">The first release is on its way. Watch the <a href="https://github.com/YuvrajxGarg/pin" style="color:var(--text);border-bottom:1px solid rgba(204,255,77,.55)">GitHub repo</a> or get it through PXL when it lands.</span></p>
+        <div class="platforms">
+          <div class="platform" data-platform="mac">
+            <header><svg><use href="#apple"/></svg><div><h3>macOS</h3><small>macOS 12 or later · Apple silicon</small></div></header>
+            <a class="btn btn-primary" data-dl="mac" href="https://github.com/YuvrajxGarg/pin/releases/latest/download/Pin.dmg"><svg><use href="#down"/></svg><span class="not-soon">Download for Mac</span><span class="soon">Coming soon</span> <span class="sub" data-size="mac"></span></a>
+            <p class="note" data-note="mac">Open it and drag <b>Pin</b> to Applications. The first time, right-click it and choose <b>Open</b>, then click <b>Allow</b> when macOS asks about data from other apps.</p>
+          </div>
+          <div class="platform" data-platform="windows">
+            <header><svg><use href="#windows"/></svg><div><h3>Windows</h3><small>Windows 10 or 11 · 64-bit</small></div></header>
+            <a class="btn btn-quiet" data-dl="windows" href="https://github.com/YuvrajxGarg/pin/releases/latest/download/Pin-Setup.exe"><svg><use href="#down"/></svg><span class="not-soon">Download for Windows</span><span class="soon">Coming soon</span> <span class="sub" data-size="windows"></span></a>
+            <p class="note" data-note="windows">Run the setup. It adds Pin to the Start menu. If SmartScreen appears, click <b>More info</b>, then <b>Run anyway</b>.</p>
+          </div>
+        </div>
+        <div class="pxl-note">
+          <span class="pm">pxl<i></i></span>
+          <p>Pin is part of <a href="https://pxlvzn.in">PXL</a>, the free app that installs, opens and updates every PXLVZN app, including <a href="https://dwn.pxlvzn.in">Dwn</a>, <a href="https://tag.pxlvzn.in">Tag</a>, Stm, Lut, Hop, Syn and Pin. Already have PXL? Pin shows up in its app list once it is released.</p>
+        </div>
+        <p class="meta" style="margin-top:26px"><a href="https://github.com/YuvrajxGarg/pin/releases" data-notes>Release notes</a> · <a href="https://github.com/YuvrajxGarg/pin">Source code</a></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="/" class="wordmark" aria-label="Pin home"><span class="pinw">p<span class="pi">ı<i class="head" aria-hidden="true"></i></span>n</span></a>
+    <nav aria-label="Footer">
+      <a href="https://pxlvzn.in">PXL</a>
+      <a href="https://github.com/YuvrajxGarg/pin">GitHub</a>
+      <a href="https://github.com/YuvrajxGarg/pin/releases">Releases</a>
+      <a href="https://github.com/YuvrajxGarg/pin/issues">Support</a>
+    </nav>
+    <div class="fine">
+      <span>© 2026 Yuvraj Garg. MIT licensed.</span>
+      <span>Pin is not affiliated with Pinterest. The wall above is drawn in HTML, not real pins.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/main.js?v=8" defer></script>
+</body>
+</html>
