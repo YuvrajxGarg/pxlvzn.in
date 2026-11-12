@@ -29,7 +29,7 @@ const setBtn = (el, icon, label, href) => {
   if (href) el.href = href;
 };
 if (isWin) {
-  setBtn(main, "#windows", "Download for Windows", `https://github.com/${REPO}/releases/latest/download/PXL-windows.zip`);
+  setBtn(main, "#windows", "Download for Windows", `https://github.com/${REPO}/releases/latest`);
   setBtn(alt, "#apple", "Mac", "#download");
 }
 const current = $(`.platform[data-platform="${isWin ? "windows" : isMac ? "mac" : ""}"]`);
@@ -50,13 +50,25 @@ fetch(`https://api.github.com/repos/${REPO}/releases/latest`, { headers: { Accep
     const notes = $("[data-notes]");
     if (notes && rel.html_url) notes.href = rel.html_url;
     const assets = rel.assets || [];
-    for (const a of assets) {
-      if (a.name === "PXL-mac.zip") $$('[data-size="mac"]').forEach((el) => (el.textContent = size(a.size)));
-      if (a.name === "PXL-windows.zip") $$('[data-size="windows"]').forEach((el) => (el.textContent = size(a.size)));
+    // The installers (PXL.dmg, PXL-Setup.exe) when the release has them, else the older zips.
+    const find = (...names) => names.map((n) => assets.find((a) => a.name === n)).find(Boolean);
+    const mac = find("PXL.dmg", "PXL-mac.zip"), win = find("PXL-Setup.exe", "PXL-windows.zip");
+    const note = (key, html) => $$(`[data-note="${key}"]`).forEach((el) => (el.innerHTML = html));
+    if (mac) {
+      $$('[data-dl="mac"]').forEach((el) => (el.href = mac.browser_download_url));
+      $$('[data-size="mac"]').forEach((el) => (el.textContent = size(mac.size)));
+      if (!isWin) main.href = mac.browser_download_url;
+      if (mac.name === "PXL.dmg") note("mac", "Open it and drag <b>PXL</b> to Applications. The first time, right-click it and choose <b>Open</b>.");
+    }
+    if (win) {
+      $$('[data-dl="windows"]').forEach((el) => (el.href = win.browser_download_url));
+      $$('[data-size="windows"]').forEach((el) => (el.textContent = size(win.size)));
+      if (isWin) main.href = win.browser_download_url;
+      if (win.name === "PXL-Setup.exe") note("windows", "Run the setup. It adds PXL to the Start menu. If SmartScreen appears, click <b>More info</b>, then <b>Run anyway</b>.");
     }
     // A release can go out before its Windows build finishes: point Windows buttons at the
     // release page instead of a file that isn't there yet.
-    if (!assets.some((a) => a.name === "PXL-windows.zip")) {
+    if (!win) {
       const page = rel.html_url || `https://github.com/${REPO}/releases/latest`;
       $$('[data-dl="windows"]').forEach((el) => {
         el.href = page;

@@ -19,7 +19,7 @@ import shutil
 
 HERE = pathlib.Path(__file__).resolve().parent
 SHARED = HERE / "_shared"
-ASSET_VERSION = "3"  # bump to make browsers refetch style.css and main.js
+ASSET_VERSION = "4"  # bump to make browsers refetch style.css and main.js
 
 GLYPHS = {
     "stems": '<i class="g g-stems" aria-hidden="true"></i>',
@@ -168,12 +168,12 @@ PAGE = """<!doctype html>
           <div class="platform" data-platform="mac">
             <header><svg><use href="#apple"/></svg><div><h3>macOS</h3><small>{mac_req}</small></div></header>
             <a class="btn btn-primary" data-dl="mac" href="https://github.com/YuvrajxGarg/{id}/releases/latest"><svg><use href="#down"/></svg><span class="not-soon">Download for Mac</span><span class="soon">Coming soon</span> <span class="sub" data-size="mac"></span></a>
-            <p class="note">Unzip and move <b>{name}</b> to Applications. The first time, right-click it and choose <b>Open</b>.</p>
+            <p class="note" data-note="mac">Unzip and move <b>{name}</b> to Applications. The first time, right-click it and choose <b>Open</b>.</p>
           </div>
           <div class="platform" data-platform="windows">
             <header><svg><use href="#windows"/></svg><div><h3>Windows</h3><small>Windows 10 or 11 · 64-bit</small></div></header>
             <a class="btn btn-quiet" data-dl="windows" href="https://github.com/YuvrajxGarg/{id}/releases/latest"><svg><use href="#down"/></svg><span class="not-soon">Download for Windows</span><span class="soon">Coming soon</span> <span class="sub" data-size="windows"></span></a>
-            <p class="note">Run it. If SmartScreen appears, click <b>More info</b>, then <b>Run anyway</b>.</p>
+            <p class="note" data-note="windows">Run it. If SmartScreen appears, click <b>More info</b>, then <b>Run anyway</b>.</p>
           </div>
         </div>
         <div class="pxl-note">

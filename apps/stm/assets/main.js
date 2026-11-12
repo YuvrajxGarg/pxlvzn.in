@@ -40,8 +40,8 @@
   }
 
   // ---------------------------------------------------------------- latest release
-  // Asset names follow Dwn and Tag (Name-mac.zip, Name-windows.zip or Name-Setup-x.exe),
-  // matched loosely so a renamed build still gets picked up.
+  // Installers first (Name.dmg, Name-Setup.exe), then the older zips (Name-mac.zip,
+  // Name-windows.zip), matched loosely so a renamed build still gets picked up.
   const size = (b) => (b >= 1e9 ? (b / 1e9).toFixed(1) + " GB" : Math.round(b / 1e6) + " MB");
   const releases = `https://github.com/${REPO}/releases`;
   const soon = () => {
@@ -59,7 +59,7 @@
       if (notes && rel.html_url) notes.href = rel.html_url;
       const assets = (rel.assets || []).filter((a) => !/\.(sha256|sig|txt|json)$/i.test(a.name));
       const pick = (re) => assets.find((a) => re.test(a.name));
-      const mac = pick(/mac.*\.(zip|dmg)$/i) || pick(/\.dmg$/i);
+      const mac = pick(/\.dmg$/i) || pick(/mac.*\.zip$/i);
       const win = pick(/setup.*\.exe$/i) || pick(/win.*\.(zip|exe|msi)$/i) || pick(/\.(exe|msi)$/i);
       const wire = (key, a) => {
         const href = a ? a.browser_download_url : rel.html_url || `${releases}/latest`;
@@ -68,6 +68,10 @@
         return href;
       };
       const macHref = wire("mac", mac), winHref = wire("windows", win);
+      const name = document.title.split(" ")[0];
+      const note = (key, html) => $$(`[data-note="${key}"]`).forEach((el) => (el.innerHTML = html));
+      if (mac && /\.dmg$/i.test(mac.name)) note("mac", `Open it and drag <b>${name}</b> to Applications. The first time, right-click it and choose <b>Open</b>.`);
+      if (win && /setup.*\.exe$/i.test(win.name)) note("windows", `Run the setup. It adds ${name} to the Start menu. If SmartScreen appears, click <b>More info</b>, then <b>Run anyway</b>.`);
       if (main) main.href = isWin ? winHref : macHref;
     })
     .catch((status) => { if (status === 404) soon(); /* otherwise the static links still work */ });
