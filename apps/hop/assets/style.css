@@ -128,6 +128,8 @@ img { display: block; max-width: 100%; height: auto; }
 .ready .hero-mark .ch:nth-child(2) { animation-delay: 0.09s; }
 .ready .hero-mark .ch:nth-child(3) { animation-delay: 0.18s; }
 .ready .hero-mark svg, .ready .hero-mark .g { transform-origin: bottom; animation: drop 0.62s cubic-bezier(.3, 1.45, .5, 1) 0.42s forwards; }
+/* Room for the heavy glyphs while they animate (WebKit clips filter: blur to the box). */
+.hero-mark .ch { padding: .1em .2em .3em; margin: -.1em -.2em -.3em; }
 @keyframes rise { from { opacity: 0; transform: translateY(0.35em); filter: blur(8px); } to { opacity: 1; transform: none; filter: none; } }
 @keyframes drop { from { opacity: 0; transform: translateY(-1.1em) scaleY(1.35); } to { opacity: 1; transform: none; } }
 
@@ -365,23 +367,37 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
   border-radius: 0.02em; background: var(--accent); box-shadow: 0 0 0 0.045em var(--knock); }
 .nav .lutw { --knock: #0e0e0f; }
 
-/* Lut intro: the word arrives as flat, washed-out log footage. The grading bar drags in from the
-   right, turning everything it passes lime while the colours cycle through the spectrum (a LUT
-   remapping them), overshoots to 30%, then settles at 57% as the left side develops to full white. */
+/* Lut intro: the word is printed as three colour channels, red, green and blue, each scanned in
+   from the left, offset like misregistered film. They slide into register and add up to white (a
+   LUT is exactly that: a per-channel mapping). Then the grading bar drags in from the right,
+   turning everything it passes lime, overshoots to 30% and settles at 57%. The colour only ever
+   changes where the bar is, so there is no flicker or hue cycling. */
 .anim-lut .lutw { --x: 104%; }
-.anim-lut .base { color: #55565c; opacity: 0; }
-.anim-lut .lime { filter: hue-rotate(150deg) saturate(1.6); }
-.anim-lut .gbar { opacity: 0; }
-.ready .anim-lut .base { animation: lut-log 0.45s ease-out forwards, lut-develop 0.7s ease-out 1.05s forwards; }
-.ready .anim-lut .lutw { animation: lut-wipe 1.1s cubic-bezier(.55, 0, .25, 1) 0.45s forwards; }
-.ready .anim-lut .gbar { animation: lut-bar-in 0.15s linear 0.45s forwards, lut-glow 0.9s ease-out 1.45s; }
-.ready .anim-lut .lime { animation: lut-remap 1.1s ease-in-out 0.45s forwards; }
-@keyframes lut-log { to { opacity: 1; } }
-@keyframes lut-develop { from { color: #55565c; } to { color: var(--text); } }
+.anim-lut .base { opacity: 0; }
+.anim-lut .rgb { position: absolute; inset: 0; isolation: isolate; opacity: 0.94; }
+.anim-lut .rgb b { position: absolute; inset: 0; font-weight: inherit; mix-blend-mode: screen; will-change: transform, clip-path;
+  clip-path: inset(-0.3em calc(100% + 0.3em) -0.3em -0.3em); }
+.anim-lut .rgb b:nth-child(1) { color: #ff2a3d; --dx: -0.11em; --dy: -0.02em; --t: 0s; }
+.anim-lut .rgb b:nth-child(2) { color: #2aff5a; --dx: 0em; --dy: 0.02em; --t: 0.08s; }
+.anim-lut .rgb b:nth-child(3) { color: #3d5cff; --dx: 0.11em; --dy: 0em; --t: 0.16s; }
+.anim-lut .rgb b { transform: translate(var(--dx), var(--dy)); }
+.anim-lut .lime { z-index: 1; }
+.anim-lut .gbar { z-index: 2; opacity: 0; }
+.ready .anim-lut .rgb b { animation: lut-scan 0.5s cubic-bezier(.4, 0, .2, 1) var(--t) forwards,
+  lut-register 0.75s cubic-bezier(.65, 0, .25, 1) calc(var(--t) + 0.3s) forwards; }
+/* Once in register, the white base takes over from the channels so no colour fringes stay behind. */
+.ready .anim-lut .base { animation: lut-fade 0.2s linear 1.2s forwards; }
+.ready .anim-lut .rgb { animation: lut-off 0s linear 1.4s forwards; }
+@keyframes lut-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes lut-off { to { opacity: 0; } }
+.ready .anim-lut .lutw { animation: lut-wipe 1.15s cubic-bezier(.55, 0, .25, 1) 1.05s forwards; }
+.ready .anim-lut .gbar { animation: lut-bar-in 0.2s ease-out 1.05s forwards, lut-glow 1s ease-out 1.75s; }
+@keyframes lut-scan { to { clip-path: inset(-0.3em -0.3em -0.3em -0.3em); } }
+@keyframes lut-register { to { transform: translate(0, 0); } }
 @keyframes lut-wipe { 0% { --x: 104%; } 60% { --x: 30%; } 100% { --x: 57%; } }
 @keyframes lut-bar-in { to { opacity: 1; } }
-@keyframes lut-remap { 0% { filter: hue-rotate(150deg) saturate(1.6); } 55% { filter: hue-rotate(-60deg) saturate(1.3); } 100% { filter: none; } }
 @keyframes lut-glow { 0% { box-shadow: 0 0 0 0.045em var(--knock), 0 0 0.5em var(--accent); } 100% { box-shadow: 0 0 0 0.045em var(--knock), 0 0 0 transparent; } }
+.no-js .anim-lut .lutw { --x: 57%; } .no-js .anim-lut .base { opacity: 1; } .no-js .anim-lut .rgb { display: none; } .no-js .anim-lut .gbar { opacity: 1; }
 
 /* Stm: "stm" plus four lime level bars (55/100/35/75%). Static version is .g-stems above. */
 .stmw { display: inline-flex; align-items: baseline; }
@@ -394,78 +410,69 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
 .stmw .bars b:nth-child(4) { --i: 3; --h: 0.75; height: 75%; }
 
 /* Stm intro: a playhead sweeps across and reveals the word (as in the app). Where it stops, the
-   whole song appears as one thick bar that thumps twice with the word, then splits into its four
-   stems, which spring apart to their own levels and keep dancing like live meters for a while. */
-.anim-stm .word { display: inline-block; clip-path: inset(-0.1em 100% -0.2em 0); }
+   whole song rises as one wide bar, pulses once with the word, then splits into its four stems,
+   which spring to their own levels and bounce like live meters before settling. The bars are
+   driven by main.js (one continuous curve per bar, so nothing jumps); without JS they just show. */
+.anim-stm .word { display: inline-block; clip-path: inset(-0.2em calc(100% + 0.15em) -0.3em -0.15em); }
 .anim-stm .head { position: absolute; top: 0.08em; bottom: 0.02em; left: 0; width: 0.04em; border-radius: 0.02em; opacity: 0;
   background: var(--accent); box-shadow: 0 0 0.12em var(--accent), 0 0 0.3em rgba(204, 255, 77, 0.6); }
-.anim-stm .bars b { transform: translateX(calc(var(--i) * var(--step) * -1)) scale(2.4, 0); }
-.ready .anim-stm .word { animation: play-in 0.7s cubic-bezier(.65, 0, .35, 1) 0.1s forwards; }
-.ready .anim-stm .head { animation: head-run 0.7s cubic-bezier(.65, 0, .35, 1) 0.1s forwards; }
-.ready .anim-stm .play { animation: stm-thump 0.6s ease-out 0.95s; }
-.ready .anim-stm .bars b { animation: stm-split 1.25s linear 0.75s forwards, stm-dance var(--d) ease-in-out 2.1s 8 alternate; }
-.anim-stm .bars b:nth-child(1) { --d: 0.42s; --lo: 0.55; --hi: 1.25; }
-.anim-stm .bars b:nth-child(2) { --d: 0.5s; --lo: 0.7; --hi: 1.05; }
-.anim-stm .bars b:nth-child(3) { --d: 0.34s; --lo: 0.6; --hi: 1.9; }
-.anim-stm .bars b:nth-child(4) { --d: 0.46s; --lo: 0.5; --hi: 1.2; }
-@keyframes play-in { to { clip-path: inset(-0.1em 0 -0.2em 0); } }
+.js-anim .anim-stm .bars b { transform: scale(1, 0); will-change: transform; }
+.ready .anim-stm .word { animation: play-in 0.75s cubic-bezier(.65, 0, .35, 1) 0.1s forwards; }
+.ready .anim-stm .head { animation: head-run 0.75s cubic-bezier(.65, 0, .35, 1) 0.1s forwards; }
+@keyframes play-in { to { clip-path: inset(-0.2em -0.15em -0.3em -0.15em); } }
 @keyframes head-run { 0% { left: 0; opacity: 1; } 85% { opacity: 1; } 100% { left: 100%; opacity: 0; } }
-@keyframes stm-thump { 0%, 40%, 80% { transform: none; } 15%, 55% { transform: scale(1.035); } 100% { transform: none; } }
-@keyframes stm-split {
-  0% { transform: translateX(calc(var(--i) * var(--step) * -1)) scale(2.4, 0); animation-timing-function: cubic-bezier(.2, .8, .3, 1); }
-  14% { transform: translateX(calc(var(--i) * var(--step) * -1)) scale(2.4, calc(1 / var(--h))); }
-  24% { transform: translateX(calc(var(--i) * var(--step) * -1)) scale(2.4, calc(0.8 / var(--h))); }
-  34% { transform: translateX(calc(var(--i) * var(--step) * -1)) scale(2.4, calc(1 / var(--h))); }
-  44% { transform: translateX(calc(var(--i) * var(--step) * -1)) scale(2.4, calc(0.8 / var(--h))); }
-  52% { transform: translateX(calc(var(--i) * var(--step) * -1)) scale(2.4, calc(1 / var(--h))); animation-timing-function: cubic-bezier(.3, 1.7, .45, 1); }
-  76% { transform: translateX(0) scale(1, 1.18); animation-timing-function: ease-in-out; }
-  88% { transform: translateX(0) scale(1, 0.9); }
-  100% { transform: none; }
-}
-@keyframes stm-dance { from { transform: scaleY(var(--hi)); } to { transform: scaleY(var(--lo)); } }
 .no-js .anim-stm .word { clip-path: none; }
 .no-js .anim-stm .bars b { transform: none; }
 
-/* Hop: "hop" with a lime "o" caught mid-hop, 0.28em above the baseline, over a short shadow dash (as in the app). */
+/* Hop: "hop" in white under a dashed lime arc from the top of the h to the p, with a lime file
+   (folded top-right corner) at the top of the arc, tilted 12deg. Same as the app (hop/ui/styles.css). */
 .hopw { position: relative; display: inline-block; }
-.hopw .o { display: inline-block; color: var(--accent); transform: translateY(-0.28em); transform-origin: 50% 100%; }
-.hopw .sh { position: absolute; left: 0.734em; top: 0.83em; width: 0.29em; height: 0.07em; border-radius: 0.035em; background: rgba(204, 255, 77, 0.38); }
+.hopw .path { position: absolute; left: 0.12em; right: 0.2em; top: -0.42em; height: 0.55em; box-sizing: border-box;
+  border: max(1px, 0.045em) dashed rgba(204, 255, 77, 0.55); border-bottom: 0; border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
+.hopw .fx { position: absolute; left: 50%; top: 0; width: 0; height: 0; }
+.hopw .file { position: absolute; left: 50%; top: -0.62em; width: 0.32em; height: 0.4em; margin-left: -0.16em;
+  background: var(--accent); border-radius: 0.03em; clip-path: polygon(0 0, 68% 0, 100% 26%, 100% 100%, 0 100%); transform: rotate(12deg); }
+.hopw .fx .file { left: 0; }
+.hopw .file::after { content: ""; position: absolute; top: 0; right: 0; width: 32%; height: 26%; background: #7d9c2f;
+  clip-path: polygon(0 0, 100% 100%, 0 100%); }
 
-/* Hop intro: the h and p spring up from the baseline (as in the app). Then the lime o bounds in from
-   the left, hops onto the top of the h, squashes, hops down into its gap (the p flinches), squashes
-   again and floats up to hover over its shadow, bobbing gently. */
-.anim-hop { margin-top: calc(34px + 0.5em); }
+/* Hop intro: the letters spring up. The file launches from the foot of the arc at the h, small and
+   spun back, and flies up the left half of the arc to the top, unrolling the dashed path behind
+   it (x eases in, y eases out, so it follows the curve). The right half of the path then draws
+   toward the p, as if the file is about to land there, while the file gives a little lift and
+   then keeps floating gently. */
+.anim-hop { margin-top: calc(34px + 0.45em); }
 .anim-hop .ch { display: inline-block; opacity: 0; transform-origin: 50% 100%; }
-.anim-hop .o { opacity: 0; }
-.anim-hop .sh { opacity: 0; }
-.ready .anim-hop .ch { animation: hop-spring 0.5s cubic-bezier(.34, 1.56, .64, 1) 0.05s forwards; }
-.ready .anim-hop .ch.p { animation: hop-spring 0.5s cubic-bezier(.34, 1.56, .64, 1) 0.17s forwards, hop-flinch 0.35s ease-out 1.3s; }
-.ready .anim-hop .o { animation: hop-o 1.25s linear 0.45s forwards, hop-bob 1.4s ease-in-out 1.75s infinite alternate; }
-.ready .anim-hop .sh { animation: hop-sh-in 0.3s ease-out 1.3s forwards, hop-sh-bob 1.4s ease-in-out 1.75s infinite alternate; }
+.anim-hop .path { opacity: 0; }
+.anim-hop .path.l { clip-path: inset(-0.1em 100% -0.1em -0.1em); opacity: 1; }
+.anim-hop .path.r { clip-path: inset(-0.1em -0.1em -0.1em 50%); }
+.anim-hop .fx { left: 0.12em; }
+.anim-hop .file { top: 0; opacity: 0; transform: rotate(-40deg) scale(0.3); }
+.ready .anim-hop .ch { animation: hop-spring 0.5s cubic-bezier(.34, 1.56, .64, 1) forwards; }
+.ready .anim-hop .ch:nth-child(2) { animation-delay: 0.08s; }
+.ready .anim-hop .ch:nth-child(3) { animation-delay: 0.16s; }
+.ready .anim-hop .path.l { animation: hop-draw 0.76s cubic-bezier(.12, 0, .39, 0) 0.52s forwards; }
+.ready .anim-hop .path.r { animation: hop-fade 0.38s ease-out 1.28s forwards; }
+.ready .anim-hop .fx { animation: hop-x 0.76s cubic-bezier(.12, 0, .39, 0) 0.52s forwards; }
+.ready .anim-hop .file { animation: hop-y 0.76s cubic-bezier(.61, 1, .88, 1) 0.52s forwards,
+  hop-lift 0.38s ease-in-out 1.28s, hop-float 2.4s ease-in-out 1.7s infinite alternate; }
 @keyframes hop-spring { 0% { opacity: 0; transform: scale(0.2); } 30% { opacity: 1; } 100% { opacity: 1; transform: none; } }
-@keyframes hop-o {
-  0% { opacity: 0; transform: translate(-1.5em, 0); animation-timing-function: cubic-bezier(.2, .6, .4, 1); }
-  4% { opacity: 1; }
-  16% { transform: translate(-1.04em, -1.12em); animation-timing-function: cubic-bezier(.6, 0, .8, .4); }
-  32% { opacity: 1; transform: translate(-0.58em, -0.73em); animation-timing-function: ease-out; }
-  37.6% { transform: translate(-0.58em, -0.73em) scale(1.25, 0.75); animation-timing-function: ease-in; }
-  41.6% { transform: translate(-0.58em, -0.73em) scale(0.92, 1.1); animation-timing-function: cubic-bezier(.2, .6, .4, 1); }
-  54.4% { transform: translate(-0.29em, -1.08em); animation-timing-function: cubic-bezier(.6, 0, .8, .4); }
-  68% { transform: translate(0, 0); animation-timing-function: ease-out; }
-  73.6% { transform: translate(0, 0) scale(1.38, 0.62); animation-timing-function: ease-in-out; }
-  80% { transform: translate(0, -0.02em) scale(0.9, 1.12); animation-timing-function: cubic-bezier(.2, .8, .3, 1); }
-  100% { opacity: 1; transform: translate(0, -0.28em); }
-}
-@keyframes hop-bob { from { transform: translateY(-0.28em); } to { transform: translateY(-0.36em); } }
-@keyframes hop-flinch { 0%, 100% { transform: none; } 30% { transform: translateY(0.05em) scale(1.03, 0.95); } }
-@keyframes hop-sh-in { to { opacity: 1; } }
-@keyframes hop-sh-bob { from { transform: scaleX(1); opacity: 1; } to { transform: scaleX(0.75); opacity: 0.6; } }
-.no-js .anim-hop .ch, .no-js .anim-hop .o, .no-js .anim-hop .sh { opacity: 1; }
+@keyframes hop-draw { to { clip-path: inset(-0.1em 50% -0.1em -0.1em); } }
+@keyframes hop-fade { to { opacity: 1; } }
+@keyframes hop-x { to { left: 50%; } }
+@keyframes hop-y { 0% { top: 0; opacity: 0; transform: rotate(-40deg) scale(0.3); } 15% { opacity: 1; }
+  100% { top: -0.62em; opacity: 1; transform: rotate(12deg); } }
+@keyframes hop-lift { 0%, 100% { transform: rotate(12deg); } 50% { transform: translateY(-0.06em) rotate(12deg) scale(1.06); } }
+@keyframes hop-float { from { transform: rotate(12deg); } to { transform: translateY(-0.04em) rotate(9deg); } }
+.no-js .anim-hop .ch, .no-js .anim-hop .path, .no-js .anim-hop .file { opacity: 1; }
+.no-js .anim-hop .path { clip-path: none; } .no-js .anim-hop .path.r { display: none; }
+.no-js .anim-hop .fx { left: 50%; } .no-js .anim-hop .file { top: -0.62em; transform: rotate(12deg); }
 
 @media (prefers-reduced-motion: reduce) {
-  .anim-lut .lutw { --x: 57%; } .anim-lut .base { color: var(--text); opacity: 1; } .anim-lut .lime { filter: none; } .anim-lut .gbar { opacity: 1; }
-  .anim-stm .word { clip-path: none; } .anim-stm .head { display: none; } .anim-stm .bars b { transform: none; }
-  .anim-hop .ch, .anim-hop .o, .anim-hop .sh { opacity: 1; }
+  .anim-lut .lutw { --x: 57%; } .anim-lut .base { opacity: 1; } .anim-lut .rgb { display: none; } .anim-lut .gbar { opacity: 1; }
+  .anim-stm .word { clip-path: none; } .anim-stm .head { display: none; } .anim-stm .bars b, .js-anim .anim-stm .bars b { transform: none !important; }
+  .anim-hop .ch, .anim-hop .path, .anim-hop .file { opacity: 1; } .anim-hop .path { clip-path: none; } .anim-hop .path.r { display: none; }
+  .anim-hop .fx { left: 50%; } .anim-hop .file { top: -0.62em; transform: rotate(12deg); }
   .anim-lut *, .anim-lut .lutw, .anim-stm *, .anim-hop * { animation: none !important; }
 }
 
@@ -614,3 +621,42 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
   .transfer { grid-template-columns: 1fr; }
   .pxl-note { flex-direction: column; align-items: flex-start; }
 }
+
+/* =============================================================== type (v2, as on pxlvzn.in)
+   Inter Tight for display (100–900, so weights can contrast: a heavy phrase, then a thin one),
+   Inter for text, JetBrains Mono for small technical labels. The wordmark keeps the heavy system
+   grotesk so it matches the app icons. */
+:root {
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --display: "Inter Tight", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --brand: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter Tight", "Segoe UI", system-ui, sans-serif;
+}
+body { letter-spacing: -0.005em; }
+.wordmark, .pxl-note .pm { font-family: var(--brand); }
+.nav-links { font: 450 14px/1 var(--font); }
+
+.tagline { margin: 0 auto; max-width: 17em; font: 300 clamp(30px, 4.4vw, 54px)/1.08 var(--display); letter-spacing: -0.03em; }
+.tagline .t-thin { font-weight: 200; color: var(--text2); }
+.tagline .t-bold { display: block; font-weight: 750; color: var(--text); }
+.lede { font-weight: 350; }
+
+h2 { font: 750 clamp(34px, 4.8vw, 58px)/1.04 var(--display); letter-spacing: -0.035em; max-width: 20ch; }
+h2 .thin { font-weight: 200; color: var(--text2); }
+.kicker { display: inline-flex; align-items: center; gap: 10px; font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--text3); }
+.kicker::before { content: ""; width: 7px; height: 7px; background: var(--accent); }
+.section-lede { font: 350 18.5px/1.55 var(--font); }
+.card h3 { font: 600 19px/1.25 var(--display); letter-spacing: -0.015em; }
+.card p { font-weight: 380; }
+.btn { font-family: var(--font); font-weight: 600; letter-spacing: -0.01em; }
+.chip { font-family: var(--display); font-weight: 700; letter-spacing: -.01em; }
+.caption { font: 400 12px/1.5 var(--mono); }
+.meta { font-weight: 400; }
+.steps3 .card::before { width: auto; height: auto; background: none; color: var(--accent); font: 500 13px/1 var(--mono);
+  content: "0" counter(st); place-items: start; }
+.steps3 h3 { font: 200 30px/1.1 var(--display); letter-spacing: -0.03em; margin-top: 18px; }
+.trio .big { font: 200 64px/1 var(--display); letter-spacing: -0.04em; }
+.platform h3 { font: 700 19px/1.2 var(--display); }
+.download-box h2 { font-size: clamp(38px, 5.4vw, 64px); margin-inline: auto; }
+footer .fine { font-family: var(--mono); font-size: 11.5px; }
+.term { font-family: var(--mono); }

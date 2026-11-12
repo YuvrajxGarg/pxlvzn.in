@@ -14,7 +14,7 @@ const CSS = fs.readFileSync(path.join(HERE, "_shared", "style.css"), "utf8");
 const APPS = {
   stm: { glyph: '<i class="g g-stems"></i>', tagline: "Split any song into its stems." },
   lut: { mark: '<span class="lutw" style="--knock:#1f1f21"><span class="base">lut</span><span class="lime">lut</span><i class="gbar"></i></span>', tagline: "Match the colour of one shot to another." },
-  hop: { mark: '<span class="hopw">h<span class="o">o</span>p<i class="sh"></i></span>', tagline: "Send files between your devices. No cloud." },
+  hop: { mark: '<span class="hopw">hop<i class="path"></i><i class="file"></i></span>', tagline: "Send files between your devices. No cloud." },
 };
 
 const page = (body, w, h) => `<!doctype html><html><head><style>${CSS}

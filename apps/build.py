@@ -18,7 +18,7 @@ import shutil
 
 HERE = pathlib.Path(__file__).resolve().parent
 SHARED = HERE / "_shared"
-ASSET_VERSION = "2"  # bump to make browsers refetch style.css and main.js
+ASSET_VERSION = "3"  # bump to make browsers refetch style.css and main.js
 
 GLYPHS = {
     "stems": '<i class="g g-stems" aria-hidden="true"></i>',
@@ -64,9 +64,9 @@ PAGE = """<!doctype html>
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&family=Inter+Tight:wght@100..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/style.css?v={v}">
-<script>document.documentElement.classList.remove("no-js")</script>
+<script>document.documentElement.classList.replace("no-js", "js-anim")</script>
 </head>
 <body data-repo="YuvrajxGarg/{id}">
 
@@ -94,7 +94,7 @@ PAGE = """<!doctype html>
 
       {hero_mark}
 
-      <h1>{tagline}</h1>
+      <h1 class="tagline">{tagline_html}</h1>
       <p class="lede">{lede}</p>
 
       <div class="cta">
@@ -146,7 +146,7 @@ PAGE = """<!doctype html>
     <div class="wrap">
       <div class="reveal">
         <div class="kicker">Private by design</div>
-        <h2>It runs on your computer. That's it.</h2>
+        <h2>It runs on your computer. <span class="thin">That's it.</span></h2>
         <p class="section-lede">{private_lede}</p>
       </div>
       <div class="trio">
@@ -161,7 +161,7 @@ PAGE = """<!doctype html>
     <div class="wrap">
       <div class="download-box reveal">
         <div class="kicker">Download</div>
-        <h2>Get {name}. It's free.</h2>
+        <h2>Get {name}. <span class="thin">It's free.</span></h2>
         <p class="section-lede" style="margin-inline:auto"><span class="not-soon"><span data-version>The latest version</span>. It checks for updates and installs them with one click.</span><span class="soon">The first release is on its way. Watch the <a href="https://github.com/YuvrajxGarg/{id}" style="color:var(--text);border-bottom:1px solid rgba(204,255,77,.55)">GitHub repo</a> or get it through PXL when it lands.</span></p>
         <div class="platforms">
           <div class="platform" data-platform="mac">
@@ -216,7 +216,7 @@ NOT_FOUND = """<!doctype html>
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&family=Inter+Tight:wght@100..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/style.css?v={v}">
 </head>
 <body>
@@ -319,13 +319,14 @@ APPS = [
     dict(
         id="stm", name="Stm", glyph="stems",
         tagline="Split any song into its stems.",
+        tagline_html='<span class="t-thin">Split any song</span> <span class="t-bold">into its stems.</span>',
         description="Stm is a free app for Mac and Windows that splits any song into vocals, drums, bass and everything else, on your own computer. No uploads, no accounts, no per-song credits.",
         og="Vocals, drums, bass and the rest, as separate files. On your own computer, free for Mac and Windows.",
         lede="Drop in a song and get vocals, drums, bass and everything else as separate files. Made for remixes, acapellas, karaoke and sampling, and it runs on your own computer, so nothing is uploaded and there are no per-song credits.",
         os_line="macOS and Windows",
         demo=STM_DEMO, demo_label="Stm splitting a song into four lanes: vocals, drums, bass and other.",
         caption="Drop a song. Get four files back.",
-        features_title="Studio-grade stems, no studio.",
+        features_title='Studio-grade stems. <span class="thin">No studio.</span>',
         features_lede="The same kind of model the paid stem sites run, on your own machine and your own GPU.",
         cards=[
             card("span-3 wide", "layers", "Four clean stems", "Vocals, drums, bass and other, each as its own lossless WAV, lined up sample for sample so they drop straight into a DAW.", '<div class="chips" aria-label="Stems"><span class="chip on">Vocals</span><span class="chip on">Drums</span><span class="chip on">Bass</span><span class="chip on">Other</span><span class="chip">Instrumental</span></div>', lime=True),
@@ -334,7 +335,7 @@ APPS = [
             card("span-2", "file", "Drop anything", "MP3, WAV, FLAC, M4A and the audio from video files. Drop a whole folder to split an album."),
             card("span-2", "term", "And a CLI", "Script it, batch it, put it in a pipeline.", '<div class="term"><span class="p">$</span> stm split song.mp3</div>'),
         ],
-        how_title="Three steps, no settings.",
+        how_title='Three steps. <span class="thin">No settings.</span>',
         how_lede="The defaults are the good ones. Open the advanced panel only if you want to.",
         steps=[step("Drop a song", "Drag a file or folder onto the window, or use the CLI."),
                step("Stm splits it", "The model runs locally, chunk by chunk, using your GPU when there is one."),
@@ -347,13 +348,14 @@ APPS = [
     dict(
         id="lut", name="Lut", glyph="cube",
         tagline="Match the colour of one shot to another.",
+        tagline_html='<span class="t-thin">Match the colour</span> <span class="t-bold">of one shot to another.</span>',
         description="Lut is a free app for Mac and Windows that matches the colour of your clip to any reference frame and gives you a .cube LUT plus a graded copy. Works with Resolve, Premiere and Final Cut.",
         og="Drop a reference frame and your clip. Get a .cube LUT and a graded copy. Free for Mac and Windows.",
         lede="Drop a reference frame and your clip. Lut works out the look and gives you a <code style=\"font:600 .9em ui-monospace,monospace;color:var(--text)\">.cube</code> LUT you can use in Resolve, Premiere or Final Cut, plus a graded copy of the clip. Great for making AI shots sit next to real footage.",
         os_line="macOS and Windows",
         demo=LUT_DEMO, demo_label="A landscape shot, half in flat grey colours and half matched to a warm golden-hour reference, with a draggable divider.",
         caption="Drag across the frame to compare. Your clip on the left, matched on the right.",
-        features_title="A colourist's first pass, in a second.",
+        features_title="A colourist's first pass. <span class=\"thin\">In a second.</span>",
         features_lede="Lut does the matching. You keep full control in the editor you already use.",
         cards=[
             card("span-3 wide", "cube", "A real .cube LUT", "A 33-point 3D LUT that loads in DaVinci Resolve, Premiere Pro, Final Cut Pro, After Effects and OBS. Apply it to one clip or the whole timeline.", '<div class="chips" aria-label="Works in"><span class="chip on">Resolve</span><span class="chip on">Premiere</span><span class="chip on">Final Cut</span><span class="chip">After Effects</span><span class="chip">OBS</span></div>', lime=True),
@@ -362,7 +364,7 @@ APPS = [
             card("span-2", "layers", "A graded copy too", "Lut also writes the graded clip with ffmpeg, at full quality, beside the original. The original is never touched."),
             card("span-2", "term", "And a CLI", "Batch a folder of shots against one look.", '<div class="term"><span class="p">$</span> lut match ref.jpg clip.mov</div>'),
         ],
-        how_title="Pick a look. Get the LUT.",
+        how_title='Pick a look. <span class="thin">Get the LUT.</span>',
         how_lede="No nodes, no curves, no scopes, unless you want to take it further.",
         steps=[step("Drop a reference", "Any frame with the look you want: a film still, a photo, a hero shot."),
                step("Drop your clip", "Lut samples both and builds the colour transform between them."),
@@ -375,13 +377,14 @@ APPS = [
     dict(
         id="hop", name="Hop", glyph="hop",
         tagline="Send files between your devices. No cloud.",
+        tagline_html='<span class="t-thin">Send files between your devices.</span> <span class="t-bold">No cloud.</span>',
         description="Hop is a free app that sends files between your Mac, Windows PC and phone over your own Wi-Fi. Encrypted, resumable, full speed, with no cloud and no accounts. Phones use it in the browser.",
         og="AirDrop-style transfers between Mac, Windows and phones on your own Wi-Fi. Free, encrypted, no cloud.",
         lede="Like AirDrop, but between everything. Hop sends files and folders between your Mac, your Windows PC and your phone over your own Wi-Fi, at full speed, encrypted, and without going through anyone's cloud. Phones don't need an app at all.",
         os_line="macOS and Windows, phones in the browser",
         demo=HOP_DEMO, demo_label="A Mac sending a folder to a phone over Wi-Fi, with a Windows PC paired nearby and a six-digit pairing code.",
         caption="Your devices find each other. Drop a file on one and it hops to the other.",
-        features_title="Fast, private, and it just finds things.",
+        features_title='Fast and private. <span class="thin">It just finds things.</span>',
         features_lede="Your files go straight from one device to the other, over your own network.",
         cards=[
             card("span-3 wide", "wifi", "Finds your devices", "Hop discovers your other computers on the same Wi-Fi with Bonjour (mDNS). No IP addresses, no setup.", '<div class="chips" aria-label="Platforms"><span class="chip on">Mac</span><span class="chip on">Windows</span><span class="chip on">iPhone</span><span class="chip on">Android</span></div>', lime=True),
@@ -390,7 +393,7 @@ APPS = [
             card("span-2", "resume", "Resumes, then verifies", "Big files go in chunks that pick up where they left off if the Wi-Fi drops, with a SHA-256 check at the end."),
             card("span-2", "term", "And a CLI", "Send from scripts, servers and SSH sessions.", '<div class="term"><span class="p">$</span> hop send ./renders</div>'),
         ],
-        how_title="Open it on both. Drop a file.",
+        how_title='Open it on both. <span class="thin">Drop a file.</span>',
         how_lede="There's nothing to sign in to and nothing to configure.",
         steps=[step("Open Hop", "On both computers, or scan the QR code with your phone."),
                step("Pair once", "Type the 6-digit code. After that, your devices trust each other."),
@@ -407,17 +410,19 @@ APPS = [
 # hero version, which carries its own intro animation (see "per-app marks" in style.css).
 LUT_MARK = ('<span class="lutw"><span class="base">lut</span><span class="lime" aria-hidden="true">lut</span>'
             '<i class="gbar" aria-hidden="true"></i></span>')
-HOP_MARK = '<span class="hopw">h<span class="o">o</span>p<i class="sh" aria-hidden="true"></i></span>'
+HOP_MARK = '<span class="hopw">hop<i class="path" aria-hidden="true"></i><i class="file" aria-hidden="true"></i></span>'
 MARKS = {"lut": LUT_MARK, "hop": HOP_MARK}
 
 HERO_MARKS = {
     "stm": ('<div class="hero-mark wordmark anim-stm" aria-hidden="true"><span class="stmw">'
             '<span class="play"><span class="word">stm</span><i class="head"></i></span>'
             '<i class="bars"><b></b><b></b><b></b><b></b></i></span></div>'),
-    "lut": f'<div class="hero-mark wordmark anim-lut" aria-hidden="true">{LUT_MARK}</div>',
+    "lut": ('<div class="hero-mark wordmark anim-lut" aria-hidden="true"><span class="lutw"><span class="base">lut</span>'
+            '<span class="rgb"><b>lut</b><b>lut</b><b>lut</b></span><span class="lime">lut</span>'
+            '<i class="gbar"></i></span></div>'),
     "hop": ('<div class="hero-mark wordmark anim-hop" aria-hidden="true"><span class="hopw">'
-            '<span class="ch">h</span><span class="o">o</span><span class="ch p">p</span>'
-            '<i class="sh"></i></span></div>'),
+            '<span class="ch">h</span><span class="ch">o</span><span class="ch">p</span>'
+            '<i class="path l"></i><i class="path r"></i><i class="fx"><i class="file"></i></i></span></div>'),
 }
 
 
