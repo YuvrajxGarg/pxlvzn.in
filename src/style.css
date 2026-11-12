@@ -424,7 +424,7 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
 /* Syn: a lime sync link, two dots (one per track) joined where they line up. */
 /* Pin: a block of lime tiles stands in for the i (see apps/_shared/style.css). The tile is a
    flex box, so the mark is laid out inline here for the block's baseline to sit right. */
-.tile .mk:has(.mi) { display: inline-block; white-space: nowrap; }
+.tile .mk:has(.mi) { display: inline-block; white-space: nowrap; padding-right: 0; position: relative; top: -.13em; }
 .tile .mk .mi { display: inline-block; height: .53em; width: .44em; margin: 0 .05em 0 .12em; overflow: hidden; line-height: 0; white-space: nowrap; }
 .tile .mk .mi .c { display: inline-flex; vertical-align: top; flex-direction: column; gap: .045em; height: 100%; width: .1167em; margin-right: .045em; }
 .tile .mk .mi .c:last-child { margin-right: 0; }
