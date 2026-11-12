@@ -426,11 +426,10 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
 .no-js .anim-stm .word { clip-path: none; }
 .no-js .anim-stm .bars b { transform: none; }
 
-/* Hop: "hop" with a lime "o" caught mid-hop, floating above the baseline over its own shadow. */
+/* Hop: "hop" with a lime "o" caught mid-hop, 0.28em above the baseline, over a short shadow dash (as in the app). */
 .hopw { position: relative; display: inline-block; }
-.hopw .o { display: inline-block; color: var(--accent); transform: translateY(-0.16em); transform-origin: 50% 100%; }
-.hopw .sh { position: absolute; left: 0.66em; top: 0.83em; width: 0.42em; height: 0.07em; border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(204, 255, 77, 0.55), rgba(204, 255, 77, 0)); }
+.hopw .o { display: inline-block; color: var(--accent); transform: translateY(-0.28em); transform-origin: 50% 100%; }
+.hopw .sh { position: absolute; left: 0.734em; top: 0.83em; width: 0.29em; height: 0.07em; border-radius: 0.035em; background: rgba(204, 255, 77, 0.38); }
 
 /* Hop intro: the h and p spring up from the baseline (as in the app). Then the lime o bounds in from
    the left, hops onto the top of the h, squashes, hops down into its gap (the p flinches), squashes
@@ -455,9 +454,9 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
   68% { transform: translate(0, 0); animation-timing-function: ease-out; }
   73.6% { transform: translate(0, 0) scale(1.38, 0.62); animation-timing-function: ease-in-out; }
   80% { transform: translate(0, -0.02em) scale(0.9, 1.12); animation-timing-function: cubic-bezier(.2, .8, .3, 1); }
-  100% { opacity: 1; transform: translate(0, -0.16em); }
+  100% { opacity: 1; transform: translate(0, -0.28em); }
 }
-@keyframes hop-bob { from { transform: translateY(-0.16em); } to { transform: translateY(-0.25em); } }
+@keyframes hop-bob { from { transform: translateY(-0.28em); } to { transform: translateY(-0.36em); } }
 @keyframes hop-flinch { 0%, 100% { transform: none; } 30% { transform: translateY(0.05em) scale(1.03, 0.95); } }
 @keyframes hop-sh-in { to { opacity: 1; } }
 @keyframes hop-sh-bob { from { transform: scaleX(1); opacity: 1; } to { transform: scaleX(0.75); opacity: 0.6; } }
