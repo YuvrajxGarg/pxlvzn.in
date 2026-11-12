@@ -12,6 +12,7 @@ const path = require("path");
 const HERE = __dirname;
 const CSS = fs.readFileSync(path.join(HERE, "_shared", "style.css"), "utf8");
 const APPS = {
+  tag: { mark: '<span class="tagw" style="--knock:#1f1f21">tag<i class="strike"></i></span>', tagline: "Take the AI tags off your photos and videos." },
   stm: { glyph: '<i class="g g-stems"></i>', tagline: "Split any song into its stems." },
   lut: { mark: '<span class="lutw" style="--knock:#1f1f21"><span class="base">lut</span><span class="lime">lut</span><i class="gbar"></i></span>', tagline: "Match the colour of one shot to another." },
   hop: { mark: '<span class="hopw">hop<i class="go"></i></span>', tagline: "Send files between your devices. No cloud." },
