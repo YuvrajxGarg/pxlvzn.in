@@ -780,30 +780,35 @@ footer .fine { font-family: var(--mono); font-size: 11.5px; }
 }
 
 /* ------------------------------------------------------------- Pin
-   Mark: "pin" with a dotless i whose dot is a lime pin head (matches the app's icon). */
+   Mark: "p", a block of lime pin tiles standing in for the i, "n". Three columns at staggered
+   heights, the screensaver's wall in miniature, at letter height. The gaps are set from the
+   glyphs' ink (the p's bowl overhangs its box; the n has a side bearing), so they look equal. */
 .pinw { position: relative; display: inline-block; white-space: nowrap; }
-.pinw .pi { position: relative; display: inline-block; }
-.pinw .head { position: absolute; left: 50%; top: -0.04em; width: 0.25em; height: 0.25em; margin-left: -0.155em; border-radius: 50%;
-  background: radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.75) 0 0.035em, transparent 0.06em), var(--accent); }
+.pinw .mi { display: inline-block; height: .53em; width: .44em; margin: 0 .05em 0 .12em; overflow: hidden; line-height: 0; white-space: nowrap; }
+.pinw .mi .c { display: inline-flex; vertical-align: top; flex-direction: column; gap: .045em; height: 100%; width: .1167em; margin-right: .045em; }
+.pinw .mi .c:last-child { margin-right: 0; }
+.pinw .mi b { display: block; flex: none; background: var(--accent); border-radius: .03em; }
+.pinw .mi .c b:last-child { flex: 1; }
+.pinw .mi .c:nth-child(1) b:nth-child(1) { height: .17em; } .pinw .mi .c:nth-child(1) b:nth-child(2) { height: .13em; }
+.pinw .mi .c:nth-child(2) b:nth-child(1) { height: .09em; } .pinw .mi .c:nth-child(2) b:nth-child(2) { height: .19em; }
+.pinw .mi .c:nth-child(3) b:nth-child(1) { height: .23em; }
+.wordmark .pinw { font: inherit; }
 
-/* Pin intro: the letters scroll up into place like the screensaver's columns, each at its own
-   speed, then the pin head drops in, squashes as it lands and sends out a ripple: pinned. */
-.anim-pin .ch { display: inline-block; opacity: 0; transform: translateY(1.1em); }
-.anim-pin .head { opacity: 0; transform: translateY(-1.6em) scale(0.9); }
-.anim-pin .ripple { position: absolute; left: 50%; top: -0.04em; width: 0.25em; height: 0.25em; margin-left: -0.155em; border-radius: 50%;
-  border: 0.02em solid var(--accent); opacity: 0; }
-.ready .anim-pin .ch { animation: pin-col 0.95s cubic-bezier(.2, .8, .2, 1) 0.05s forwards; }
-.ready .anim-pin .ch:nth-child(2) { animation-duration: 0.8s; animation-delay: 0.16s; }
-.ready .anim-pin .ch:nth-child(3) { animation-duration: 1.05s; animation-delay: 0.1s; }
-.ready .anim-pin .head { animation: pin-drop 0.55s cubic-bezier(.5, 0, .75, 0) 1s forwards, pin-land 0.4s cubic-bezier(.2, .9, .3, 1.4) 1.55s forwards; }
-.ready .anim-pin .ripple { animation: pin-ripple 0.8s ease-out 1.55s forwards; }
-@keyframes pin-col { 0% { opacity: 0; transform: translateY(1.1em); } 30% { opacity: 1; } 100% { opacity: 1; transform: none; } }
-@keyframes pin-drop { 0% { opacity: 0; transform: translateY(-1.6em) scale(0.9); } 20% { opacity: 1; } 100% { opacity: 1; transform: none; } }
-@keyframes pin-land { 0% { opacity: 1; transform: scale(1.25, 0.7); } 100% { opacity: 1; transform: none; } }
-@keyframes pin-ripple { 0% { opacity: 0.9; transform: scale(1); } 100% { opacity: 0; transform: scale(3.4); } }
-.no-js .anim-pin .ch, .no-js .anim-pin .head { opacity: 1; transform: none; }
-.tile .mk .pi { position: relative; display: inline-block; }
-.tile .mk .head { position: absolute; left: 50%; top: -0.04em; width: 0.25em; height: 0.25em; margin-left: -0.155em; border-radius: 50%; background: var(--accent); }
+/* Pin intro: the p and n rise, then the tile columns scroll up into the word at three
+   different speeds, like the screensaver's wall, and settle. */
+.anim-pin .ch { display: inline-block; opacity: 0; }
+.anim-pin .mi .c { transform: translateY(1.2em); }
+.ready .anim-pin .ch { animation: rise 0.7s cubic-bezier(.2, .9, .25, 1.05) forwards; }
+.ready .anim-pin .ch:last-child { animation-delay: 0.12s; }
+.ready .anim-pin .mi .c { animation: pin-scroll-in var(--d) cubic-bezier(.22, .8, .25, 1) 0.3s forwards; }
+.anim-pin .mi .c:nth-child(1) { --d: 1.15s; } .anim-pin .mi .c:nth-child(2) { --d: 0.85s; } .anim-pin .mi .c:nth-child(3) { --d: 1.35s; }
+@keyframes pin-scroll-in { to { transform: none; } }
+.no-js .anim-pin .ch { opacity: 1; } .no-js .anim-pin .mi .c { transform: none; }
+.tile .mk .mi { display: inline-block; height: .53em; width: .44em; margin: 0 .05em 0 .12em; overflow: hidden; line-height: 0; white-space: nowrap; }
+.tile .mk .mi .c { display: inline-flex; vertical-align: top; flex-direction: column; gap: .045em; height: 100%; width: .1167em; margin-right: .045em; }
+.tile .mk .mi .c:last-child { margin-right: 0; }
+.tile .mk .mi b { display: block; flex: none; background: var(--accent); border-radius: .03em; }
+.tile .mk .mi .c b:last-child { flex: 1; }
 
 /* The hero wall: five columns of pins scrolling up at different speeds, like the screensaver. */
 .pin-wall { position: relative; height: 520px; padding: 14px !important; display: flex; gap: 12px; overflow: hidden; background: #0f0f10; }
@@ -836,6 +841,6 @@ footer .fine { font-family: var(--mono); font-size: 11.5px; }
   .pclock b { font-size: 44px; } .pclock { left: 22px; bottom: 18px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .anim-pin .ch, .anim-pin .head { opacity: 1; transform: none; } .anim-pin * { animation: none !important; }
+  .anim-pin .ch { opacity: 1; } .anim-pin .mi .c { transform: none; } .anim-pin * { animation: none !important; }
   .ptrack, .pt.hide, .pt-x { animation: none !important; } .pt.hide { opacity: 1; }
 }

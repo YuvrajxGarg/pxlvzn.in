@@ -616,8 +616,10 @@ TAG_MARK = '<span class="tagw">tag<i class="strike" aria-hidden="true"></i></spa
 # Syn's static mark is the outlined brand SVG (apps/_shared/syn/mark.svg, from the syn repo's
 # brand/make_mark.py), so it looks the same on every OS and in the app and Premiere panel.
 SYN_MARK = '<img class="synmark" src="/assets/mark.svg" alt="" width="62" height="26">'
-# Pin: "pin" with a dotless i whose dot is a lime pin head (as in the app's icon).
-PIN_MARK = '<span class="pinw">p<span class="pi">\u0131<i class="head" aria-hidden="true"></i></span>n</span>'
+# Pin: "p", a block of lime pin tiles standing in for the i (three staggered columns, the
+# screensaver's masonry wall in miniature), "n". Matches the app's .mark.
+PIN_I = '<span class="mi"><span class="c"><b></b><b></b><b></b></span><span class="c"><b></b><b></b><b></b></span><span class="c"><b></b><b></b></span></span>'
+PIN_MARK = '<span class="pinw">p' + PIN_I + 'n</span>'
 MARKS = {"tag": TAG_MARK, "lut": LUT_MARK, "hop": HOP_MARK, "syn": SYN_MARK, "pin": PIN_MARK}
 
 HERO_MARKS = {
@@ -638,8 +640,7 @@ HERO_MARKS = {
             '<i class="link"><b></b><i></i><b></b></i><i class="bl"></i></span>'
             '<img class="rest" src="/assets/mark.svg" alt=""></div>'),
     "pin": ('<div class="hero-mark wordmark anim-pin" aria-hidden="true"><span class="pinw">'
-            '<span class="ch">p</span><span class="ch pi">\u0131<i class="ripple"></i><i class="head"></i></span>'
-            '<span class="ch">n</span></span></div>'),
+            '<span class="ch">p</span>' + PIN_I + '<span class="ch">n</span></span></div>'),
 }
 
 
