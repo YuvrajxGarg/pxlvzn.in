@@ -12,8 +12,8 @@ import crypto from 'node:crypto';
 import { del, get, head, issueSignedToken, list, presignUrl, put } from '@vercel/blob';
 
 export const MAX_BYTES = Number(process.env.HOP_RELAY_MAX_BYTES || 2 * 1024 ** 3); // per transfer
-export const CHUNK = 1 << 20;
-export const PIECE_MAX = CHUNK + 4096; // one sealed chunk
+export const PIECE = 8 << 20; // 8 MiB of file per relayed piece
+export const PIECE_MAX = PIECE + 4096; // one sealed piece
 export const KEEP_DAYS = 7;
 const SKEW_MS = 10 * 60 * 1000;
 const B32 = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
@@ -100,3 +100,14 @@ export async function removePrefix(prefix) {
 }
 
 export const TID = /^[0-9a-f]{32}$/;
+
+// The doorbell is a push message on ntfy.sh to a topic derived from the recipient's code, so
+// an idle Hop never polls this service. The message carries nothing but "check your inbox".
+export function bellTopic(code) {
+  return 'hop-' + crypto.createHash('sha256').update('hop-bell/' + code).digest('hex').slice(0, 32);
+}
+export async function ring(code) {
+  try {
+    await fetch(`${process.env.HOP_NTFY || 'https://ntfy.sh'}/${bellTopic(code)}`, { method: 'POST', body: 'hop', signal: AbortSignal.timeout(5000) });
+  } catch { /* the recipient also checks its inbox at launch */ }
+}
