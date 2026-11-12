@@ -60,10 +60,12 @@ img { display: block; max-width: 100%; height: auto; }
   background-image: linear-gradient(var(--accent), var(--accent)), linear-gradient(var(--accent), var(--accent)), linear-gradient(var(--accent), var(--accent)), linear-gradient(var(--accent), var(--accent));
   background-size: 0.066em 55%, 0.066em 100%, 0.066em 35%, 0.066em 75%;
   background-position: 0 100%, 33.3% 100%, 66.6% 100%, 100% 100%; }
+/* Hop: the arc over the word, from the top of the h to a dot on the p. */
+.hopw { position: relative; display: inline-block; }
+.wordmark .harc, .harc { position: absolute; left: 0; top: -0.45em; width: 1.76em; height: 1.45em; overflow: visible; pointer-events: none; }
+.wordmark .harc path, .harc path { fill: none; stroke: var(--accent); stroke-width: 4.5; stroke-linecap: round; }
+.wordmark .harc circle, .harc circle { fill: var(--accent); }
 .g-cube { width: 0.22em; height: 0.22em; border-radius: 0.03em; background: linear-gradient(135deg, #ffb35c, var(--accent) 55%, #4dd8ff); }
-.g-hop { width: 0.4em; height: 0.56em; position: relative; }
-.g-hop::before { content: ""; position: absolute; left: 0; right: 0; top: 0.08em; height: 0.36em; border: 0.055em solid var(--accent); border-bottom: 0; border-radius: 0.4em 0.4em 0 0; border-style: dashed; opacity: .55; }
-.g-hop::after { content: ""; position: absolute; right: -0.02em; bottom: 0; width: 0.15em; height: 0.15em; border-radius: 50%; background: var(--accent); }
 
 /* ------------------------------------------------------------- nav */
 
@@ -354,6 +356,68 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
 .prose a { color: var(--text); border-bottom: 1px solid rgba(204, 255, 77, 0.55); }
 .prose a:hover { border-bottom-color: var(--accent); }
 .prose code { font: 500 0.88em ui-monospace, "SF Mono", Menlo, monospace; padding: 2px 6px; border-radius: 6px; background: rgba(255, 255, 255, 0.07); color: var(--text); }
+
+/* ------------------------------------------------------------- per-app logo animations */
+
+/* Stm: a thin glowing playhead sweeps left to right revealing the word (play-in, head-run),
+   then the four bars jump like level meters and settle (meter-a..d). Matches the Stm app. */
+.anim-stm { align-items: baseline; }
+.anim-stm .play { position: relative; display: inline-block; }
+.anim-stm .word { display: inline-block; clip-path: inset(-0.1em 100% -0.2em 0); }
+.anim-stm .head { position: absolute; top: 0.08em; bottom: 0.02em; left: 0; width: 0.04em; border-radius: 0.02em;
+  background: var(--accent); box-shadow: 0 0 0.12em var(--accent), 0 0 0.3em rgba(204, 255, 77, 0.6); opacity: 0; }
+.anim-stm .bars { display: inline-flex; align-items: flex-end; gap: 0.034em; height: 0.53em; margin-left: 0.05em; }
+.anim-stm .bars b { display: block; width: 0.066em; background: var(--accent); transform-origin: 50% 100%; transform: scaleY(0); }
+.anim-stm .bars b:nth-child(1) { height: 55%; } .anim-stm .bars b:nth-child(2) { height: 100%; }
+.anim-stm .bars b:nth-child(3) { height: 35%; } .anim-stm .bars b:nth-child(4) { height: 75%; }
+.ready .anim-stm .word { animation: play-in 0.7s cubic-bezier(.65, 0, .35, 1) 0.1s forwards; }
+.ready .anim-stm .head { animation: head-run 0.7s cubic-bezier(.65, 0, .35, 1) 0.1s forwards; }
+.ready .anim-stm .bars b { animation: meter-a 0.95s ease-out forwards; }
+.ready .anim-stm .bars b:nth-child(1) { animation-name: meter-a; animation-delay: 0.8s; }
+.ready .anim-stm .bars b:nth-child(2) { animation-name: meter-b; animation-delay: 0.84s; }
+.ready .anim-stm .bars b:nth-child(3) { animation-name: meter-c; animation-delay: 0.88s; }
+.ready .anim-stm .bars b:nth-child(4) { animation-name: meter-d; animation-delay: 0.92s; }
+@keyframes play-in { to { clip-path: inset(-0.1em 0 -0.2em 0); } }
+@keyframes head-run { 0% { left: 0; opacity: 1; } 85% { opacity: 1; } 100% { left: 100%; opacity: 0; } }
+@keyframes meter-a { 0% { transform: scaleY(0); } 22% { transform: scaleY(1.45); } 42% { transform: scaleY(0.5); } 62% { transform: scaleY(1.2); } 80% { transform: scaleY(0.88); } 100% { transform: scaleY(1); } }
+@keyframes meter-b { 0% { transform: scaleY(0); } 18% { transform: scaleY(0.7); } 38% { transform: scaleY(1.15); } 58% { transform: scaleY(0.6); } 78% { transform: scaleY(1.06); } 100% { transform: scaleY(1); } }
+@keyframes meter-c { 0% { transform: scaleY(0); } 25% { transform: scaleY(2.2); } 45% { transform: scaleY(0.8); } 65% { transform: scaleY(1.6); } 82% { transform: scaleY(0.9); } 100% { transform: scaleY(1); } }
+@keyframes meter-d { 0% { transform: scaleY(0); } 20% { transform: scaleY(1.3); } 40% { transform: scaleY(0.45); } 60% { transform: scaleY(1.25); } 80% { transform: scaleY(0.92); } 100% { transform: scaleY(1); } }
+.no-js .anim-stm .word { clip-path: none; }
+.no-js .anim-stm .bars b { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .anim-stm .word { clip-path: none; animation: none !important; }
+  .anim-stm .head { display: none; }
+  .anim-stm .bars b { transform: none; animation: none !important; }
+}
+
+/* Hop: letters spring up from the baseline one after another, then a ball leaves the top of
+   the h and follows the arc as it draws in, lands on the p with a squash, and the p dips.
+   Matches playSplash() in the Hop app. */
+.anim-hop { margin-top: 0.5em; }
+.anim-hop .ch { display: inline-block; opacity: 0; transform-origin: 50% 100%; }
+.ready .anim-hop .ch { animation: hop-spring 0.5s cubic-bezier(.34, 1.56, .64, 1) forwards; }
+.ready .anim-hop .ch:nth-child(1) { animation-delay: 0.05s; }
+.ready .anim-hop .ch:nth-child(2) { animation-delay: 0.13s; }
+.ready .anim-hop .ch:nth-child(3) { animation: hop-spring 0.5s cubic-bezier(.34, 1.56, .64, 1) 0.21s forwards, hop-dip 0.32s ease-out 1.27s; }
+.anim-hop .harc path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.anim-hop .ball { offset-path: path("M16.5,10 Q80,-75 145,20"); offset-distance: 0%; offset-rotate: 0deg; opacity: 0;
+  transform-box: fill-box; transform-origin: 50% 100%; }
+.ready .anim-hop .harc path { animation: hop-draw 0.62s cubic-bezier(.45, 0, .55, 1) 0.65s forwards; }
+.ready .anim-hop .ball { animation: hop-fly 0.62s cubic-bezier(.45, 0, .55, 1) 0.65s forwards, hop-squash 0.36s ease-out 1.27s; }
+@keyframes hop-spring { 0% { opacity: 0; transform: scale(0.2); } 30% { opacity: 1; } 100% { opacity: 1; transform: none; } }
+@keyframes hop-draw { to { stroke-dashoffset: 0; } }
+@keyframes hop-fly { 0% { offset-distance: 0%; opacity: 1; } 100% { offset-distance: 100%; opacity: 1; } }
+@keyframes hop-squash { 0% { transform: scale(1.5, 0.6); } 45% { transform: scale(0.9, 1.1); } 100% { transform: none; } }
+@keyframes hop-dip { 0% { transform: none; } 35% { transform: translateY(0.05em) scale(1.02, 0.96); } 100% { transform: none; } }
+.no-js .anim-hop .ch, .no-js .anim-hop .ball { opacity: 1; }
+.no-js .anim-hop .ball { offset-distance: 100%; }
+.no-js .anim-hop .harc path { stroke-dashoffset: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .anim-hop .ch { opacity: 1; animation: none !important; }
+  .anim-hop .harc path { stroke-dashoffset: 0; animation: none !important; }
+  .anim-hop .ball { opacity: 1; offset-distance: 100%; animation: none !important; }
+}
 
 /* ------------------------------------------------------------- app illustrations
    No screenshots yet, so each hero shows what the app does, drawn in HTML. */

@@ -14,7 +14,7 @@ const CSS = fs.readFileSync(path.join(HERE, "_shared", "style.css"), "utf8");
 const APPS = {
   stm: { glyph: '<i class="g g-stems"></i>', tagline: "Split any song into its stems." },
   lut: { glyph: '<i class="g g-cube"></i>', tagline: "Match the colour of one shot to another." },
-  hop: { glyph: '<i class="g g-hop"></i>', tagline: "Send files between your devices. No cloud." },
+  hop: { mark: '<span class="hopw">hop<svg class="harc" viewBox="0 -45 176 145"><path d="M16.5,10 Q80,-75 145,20" pathLength="1"/><circle cx="145" cy="20" r="7.5"/></svg></span>', tagline: "Send files between your devices. No cloud." },
 };
 
 const page = (body, w, h) => `<!doctype html><html><head><style>${CSS}
@@ -38,7 +38,7 @@ const page = (body, w, h) => `<!doctype html><html><head><style>${CSS}
   const p = await ctx.newPage();
   for (const [id, a] of Object.entries(APPS)) {
     const dir = path.join(HERE, id, "assets");
-    const mark = (px) => `<span class="wordmark" style="font-size:${px}px">${id}${a.glyph}</span>`;
+    const mark = (px) => `<span class="wordmark" style="font-size:${px}px">${a.mark || id + a.glyph}</span>`;
 
     await p.setViewportSize({ width: 512, height: 512 });
     await p.setContent(page(`<div class="tile">${mark(150)}</div>`, 512, 512));

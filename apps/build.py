@@ -74,7 +74,7 @@ PAGE = """<!doctype html>
 
 <header class="nav" id="nav">
   <div class="wrap">
-    <a href="/" class="wordmark" aria-label="{name} home">{id}{glyph}</a>
+    <a href="/" class="wordmark" aria-label="{name} home">{mark}</a>
     <nav class="nav-links" aria-label="Sections">
       <a href="#features">Features</a>
       <a href="#how">How it works</a>
@@ -92,7 +92,7 @@ PAGE = """<!doctype html>
     <div class="wrap">
       <a class="pill" href="https://pxlvzn.in"><span class="dot"></span><b>New</b> in the PXL suite</a>
 
-      <div class="hero-mark wordmark" aria-hidden="true"><span class="ch">{c0}</span><span class="ch">{c1}</span><span class="ch">{c2}</span>{glyph}</div>
+      {hero_mark}
 
       <h1>{tagline}</h1>
       <p class="lede">{lede}</p>
@@ -187,7 +187,7 @@ PAGE = """<!doctype html>
 
 <footer>
   <div class="wrap">
-    <a href="/" class="wordmark" aria-label="{name} home">{id}{glyph}</a>
+    <a href="/" class="wordmark" aria-label="{name} home">{mark}</a>
     <nav aria-label="Footer">
       <a href="https://pxlvzn.in">PXL</a>
       <a href="https://github.com/YuvrajxGarg/{id}">GitHub</a>
@@ -222,7 +222,7 @@ NOT_FOUND = """<!doctype html>
 <body>
 <header class="nav scrolled">
   <div class="wrap">
-    <a href="/" class="wordmark" aria-label="{name} home">{id}{glyph}</a>
+    <a href="/" class="wordmark" aria-label="{name} home">{mark}</a>
     <div class="nav-right"><a class="btn btn-primary btn-sm" href="/#download">Download</a></div>
   </div>
 </header>
@@ -403,13 +403,45 @@ APPS = [
 ]
 
 
+# Hop's mark isn't a glyph after the word: a lime arc hops from the top of the h to the p and
+# ends in a dot (same as hop/ui/styles.css .mark .arc). Coordinates are in 1/100 em.
+HOP_PATH = "M16.5,10 Q80,-75 145,20"
+HOP_SVG = ('<svg class="harc" viewBox="0 -45 176 145" aria-hidden="true">'
+           f'<path d="{HOP_PATH}" pathLength="1"/><circle cx="145" cy="20" r="7.5"/></svg>')
+MARKS = {"hop": f'<span class="hopw">hop{HOP_SVG}</span>'}
+
+# Each app's own logo animation, matching the app. Apps without one use the letters-rise
+# reveal from dwn.pxlvzn.in.
+HERO_MARKS = {
+    # Stm: a playhead sweeps across and reveals the word, then the bars jump like level meters
+    # (same as stm/ui/styles.css: play-in, head-run, meter-a..d).
+    "stm": '<div class="hero-mark wordmark anim-stm" aria-hidden="true"><span class="play"><span class="word">stm</span><i class="head"></i></span>'
+           '<i class="bars"><b></b><b></b><b></b><b></b></i></div>',
+    # Hop: letters spring up one after another, then a ball leaves the top of the h, follows the
+    # arc as it draws in, lands on the p with a squash and the p dips (hop/ui/app.js playSplash).
+    "hop": '<div class="hero-mark wordmark anim-hop" aria-hidden="true"><span class="hopw">'
+           '<span class="ch">h</span><span class="ch">o</span><span class="ch p">p</span>'
+           f'<svg class="harc" viewBox="0 -45 176 145"><path d="{HOP_PATH}" pathLength="1"/>'
+           '<circle class="ball" cx="0" cy="0" r="7.5"/></svg></span></div>',
+}
+
+
+def hero_mark(app, glyph):
+    if app["id"] in HERO_MARKS:
+        return HERO_MARKS[app["id"]]
+    a, b, c = app["id"]
+    return (f'<div class="hero-mark wordmark" aria-hidden="true"><span class="ch">{a}</span>'
+            f'<span class="ch">{b}</span><span class="ch">{c}</span>{glyph}</div>')
+
+
 def build(app):
     out = HERE / app["id"]
     (out / "assets").mkdir(parents=True, exist_ok=True)
     glyph = GLYPHS[app["glyph"]]
     plain = html.unescape(app["tagline"]).rstrip(".")
-    fields = dict(app, v=ASSET_VERSION, icons=ICONS, glyph=glyph, tagline_plain=html.escape(plain),
-                  c0=app["id"][0], c1=app["id"][1], c2=app["id"][2],
+    mark = MARKS.get(app["id"], app["id"] + glyph)
+    fields = dict(app, v=ASSET_VERSION, icons=ICONS, glyph=glyph, mark=mark, tagline_plain=html.escape(plain),
+                  hero_mark=hero_mark(app, glyph),
                   cards="\n".join(app["cards"]), steps="\n".join(app["steps"]),
                   description=html.escape(app["description"], quote=True), og=html.escape(app["og"], quote=True))
     (out / "index.html").write_text(PAGE.format(**fields))
