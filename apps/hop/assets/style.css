@@ -54,12 +54,12 @@ img { display: block; max-width: 100%; height: auto; }
 .wordmark svg { width: 0.36em; height: 0.56em; fill: var(--accent); flex: none; }
 /* Each app's glyph after its three letters, as in the PXL app tiles. */
 .wordmark .g { display: inline-block; flex: none; }
-/* Stm: four level bars side by side, bottom-aligned, heights 55/100/35/75% of the x-height
-   (matches the app's .mark .bars). Drawn as backgrounds so the empty inline-block sits on the baseline. */
-.g-stems { width: 0.36em; height: 0.53em; margin-left: 0.05em; background-repeat: no-repeat;
+/* Stm: four horizontal lime track lines, left-aligned, widths 100/60/85/42% (matches the app's
+   .mark .bars). Drawn as backgrounds so the empty inline-block sits on the baseline. */
+.g-stems { width: 0.5em; height: 0.52em; margin-left: 0.08em; background-repeat: no-repeat;
   background-image: linear-gradient(var(--accent), var(--accent)), linear-gradient(var(--accent), var(--accent)), linear-gradient(var(--accent), var(--accent)), linear-gradient(var(--accent), var(--accent));
-  background-size: 0.066em 55%, 0.066em 100%, 0.066em 35%, 0.066em 75%;
-  background-position: 0 100%, 33.3% 100%, 66.6% 100%, 100% 100%; }
+  background-size: 100% 0.075em, 60% 0.075em, 85% 0.075em, 42% 0.075em;
+  background-position: 0 0, 0 33.333%, 0 66.667%, 0 100%; }
 
 /* ------------------------------------------------------------- nav */
 
@@ -387,54 +387,26 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
 @keyframes lut-glow { 0% { box-shadow: 0 0 0 0.045em var(--knock), 0 0 0.5em var(--accent); } 100% { box-shadow: 0 0 0 0.045em var(--knock), 0 0 0 transparent; } }
 .no-js .anim-lut .lutw { --x: 57%; } .no-js .anim-lut .base b { opacity: 1; font-weight: 900; } .no-js .anim-lut .gbar, .no-js .anim-lut .lime { opacity: 1; }
 
-/* Stm: "stm" plus four lime level bars (55/100/35/75%). Static version is .g-stems above. */
+/* Stm: "stm" plus four lime track lines. Static version is .g-stems above. */
 .stmw { display: inline-flex; align-items: baseline; }
-.stmw .play { position: relative; display: inline-block; }
-.stmw .bars { display: inline-flex; align-items: flex-end; gap: 0.034em; height: 0.53em; margin-left: 0.05em; }
-.stmw .bars b { --step: 0.1em; display: block; width: 0.066em; background: var(--accent); transform-origin: 50% 100%; }
-.stmw .bars b:nth-child(1) { --i: 0; --h: 0.55; height: 55%; }
-.stmw .bars b:nth-child(2) { --i: 1; --h: 1; height: 100%; }
-.stmw .bars b:nth-child(3) { --i: 2; --h: 0.35; height: 35%; }
-.stmw .bars b:nth-child(4) { --i: 3; --h: 0.75; height: 75%; }
+.stmw .bars { display: inline-block; width: 0.5em; margin-left: 0.08em; vertical-align: baseline; }
+.stmw .bars b { display: block; height: 0.075em; border-radius: 0.04em; background: var(--accent); }
+.stmw .bars b + b { margin-top: 0.0733em; }
+.stmw .bars b:nth-child(1) { --i: 0; --w: 1; width: 100%; }
+.stmw .bars b:nth-child(2) { --i: 1; --w: .6; width: 60%; }
+.stmw .bars b:nth-child(3) { --i: 2; --w: .85; width: 85%; }
+.stmw .bars b:nth-child(4) { --i: 3; --w: .42; width: 42%; }
 
-/* Stm intro (same as the app's splash, stm/ui/styles.css): the song being split.
-   1. The mix: "stm" opens out of a flat line, like a waveform swelling.
-   2. Split: four coloured copies of the word (vocals, drums, bass, other) slide out from behind
-      it into stacked lanes, like tracks in a DAW.
-   3. Each lane glides into its bar, which grows smoothly in the stem's colour and eases to lime. */
-.anim-stm { --vocals: #ccff4d; --drums: #ff8a5c; --bass: #6fb7ff; --other: #c79bff; margin-top: calc(34px + 0.75em); margin-bottom: calc(26px + 0.75em); }
-.anim-stm .word-wrap { position: relative; display: inline-block; }
-.anim-stm .word { display: inline-block; opacity: 0; transform: scaleY(.04); transform-origin: 50% 62%; }
-.anim-stm .sl { position: absolute; left: 0; top: 0; color: var(--c); opacity: 0; pointer-events: none; }
-.anim-stm .sl.l1 { --c: var(--vocals); --y: -1.05em; --t: .72s; }
-.anim-stm .sl.l2 { --c: var(--drums); --y: -.35em; --t: .76s; }
-.anim-stm .sl.l3 { --c: var(--bass); --y: .35em; --t: .80s; }
-.anim-stm .sl.l4 { --c: var(--other); --y: 1.05em; --t: .84s; }
-.anim-stm .bars b { transform: scaleY(0); }
-.anim-stm .bars b:nth-child(1) { --c: var(--vocals); --bt: 1.72s; }
-.anim-stm .bars b:nth-child(2) { --c: var(--drums); --bt: 1.78s; }
-.anim-stm .bars b:nth-child(3) { --c: var(--bass); --bt: 1.84s; }
-.anim-stm .bars b:nth-child(4) { --c: var(--other); --bt: 1.90s; }
-.ready .anim-stm .word { animation: stm-word 2.4s linear .1s forwards; }
-.ready .anim-stm .sl { animation: stm-lane 1.7s linear var(--t) forwards; }
-.ready .anim-stm .bars b { animation: stm-bar 1s cubic-bezier(.22, 1, .36, 1) var(--bt) forwards; }
-@keyframes stm-word {
-  0% { opacity: 0; transform: scaleY(.04); animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
-  25% { opacity: 1; transform: none; }
-  30% { opacity: 1; animation-timing-function: ease-in; }
-  40% { opacity: 0; }
-  68% { opacity: 0; animation-timing-function: ease-out; }
-  88%, 100% { opacity: 1; transform: none; }
-}
-@keyframes stm-lane {
-  0% { opacity: 0; transform: none; animation-timing-function: ease-out; }
-  8% { opacity: 1; animation-timing-function: cubic-bezier(.22, 1, .36, 1); }
-  42% { opacity: 1; transform: translateY(var(--y)); }
-  58% { opacity: 1; transform: translateY(var(--y)); animation-timing-function: cubic-bezier(.55, 0, .75, .3); }
-  100% { opacity: 0; transform: translate(.9em, calc(var(--y) * .2)) scale(.4); }
-}
-@keyframes stm-bar { 0% { transform: scaleY(0); background: var(--c); } 55% { background: var(--c); } 100% { transform: none; background: var(--accent); } }
-.no-js .anim-stm .word { opacity: 1; transform: none; } .no-js .anim-stm .bars b { transform: none; }
+/* Stm intro (same as the app's splash, stm/ui/styles.css): the letters rise in like the rest of
+   the family, then one lime line (the whole song) draws across where the tracks go and splits
+   into the four track lines, which slide apart to their lanes and trim to their lengths. */
+.anim-stm .bars b { --pitch: 0.1483em; transform-origin: 0 50%; opacity: 0;
+  transform: translateY(calc((1.5 - var(--i)) * var(--pitch))) scaleX(0); }
+.ready .anim-stm .bars b { animation: stm-draw .4s cubic-bezier(.3, .9, .3, 1) .55s forwards, stm-split .6s cubic-bezier(.65, 0, .35, 1) 1s forwards; }
+@keyframes stm-draw { to { opacity: 1; transform: translateY(calc((1.5 - var(--i)) * var(--pitch))) scaleX(calc(1 / var(--w))); } }
+@keyframes stm-split { from { opacity: 1; transform: translateY(calc((1.5 - var(--i)) * var(--pitch))) scaleX(calc(1 / var(--w))); }
+  to { opacity: 1; transform: none; } }
+.no-js .anim-stm .ch { opacity: 1; } .no-js .anim-stm .bars b { opacity: 1; transform: none; }
 
 /* Hop: "hop" followed by a lime up-right arrow, the send counterpart to Dwn's down arrow (as in the app). */
 .hopw { position: relative; display: inline-block; }
@@ -462,7 +434,7 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
 
 @media (prefers-reduced-motion: reduce) {
   .anim-lut .lutw { --x: 57%; } .anim-lut .base b { opacity: 1; font-weight: 900; } .anim-lut .gbar, .anim-lut .lime { opacity: 1; }
-  .anim-stm .word { opacity: 1; transform: none; } .anim-stm .sl { display: none; } .anim-stm .bars b { transform: none; }
+  .anim-stm .bars b { opacity: 1; transform: none; }
   .anim-hop .ch, .anim-hop .go { opacity: 1; transform: none; } .anim-hop .streak { display: none; }
   .anim-lut *, .anim-lut .lutw, .anim-stm *, .anim-hop * { animation: none !important; }
 }
