@@ -13,8 +13,8 @@ const HERE = __dirname;
 const CSS = fs.readFileSync(path.join(HERE, "_shared", "style.css"), "utf8");
 const APPS = {
   stm: { glyph: '<i class="g g-stems"></i>', tagline: "Split any song into its stems." },
-  lut: { glyph: '<i class="g g-cube"></i>', tagline: "Match the colour of one shot to another." },
-  hop: { mark: '<span class="hopw">hop<svg class="harc" viewBox="0 -45 176 145"><path d="M16.5,10 Q80,-75 145,20" pathLength="1"/><circle cx="145" cy="20" r="7.5"/></svg></span>', tagline: "Send files between your devices. No cloud." },
+  lut: { mark: '<span class="lutw" style="--knock:#1f1f21"><span class="base">lut</span><span class="lime">lut</span><i class="gbar"></i></span>', tagline: "Match the colour of one shot to another." },
+  hop: { mark: '<span class="hopw">h<span class="o">o</span>p<i class="sh"></i></span>', tagline: "Send files between your devices. No cloud." },
 };
 
 const page = (body, w, h) => `<!doctype html><html><head><style>${CSS}

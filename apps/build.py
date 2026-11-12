@@ -18,12 +18,12 @@ import shutil
 
 HERE = pathlib.Path(__file__).resolve().parent
 SHARED = HERE / "_shared"
-ASSET_VERSION = "1"  # bump to make browsers refetch style.css and main.js
+ASSET_VERSION = "2"  # bump to make browsers refetch style.css and main.js
 
 GLYPHS = {
     "stems": '<i class="g g-stems" aria-hidden="true"></i>',
-    "cube": '<i class="g g-cube" aria-hidden="true"></i>',
-    "hop": '<i class="g g-hop" aria-hidden="true"></i>',
+    "cube": "",
+    "hop": "",
 }
 
 ICONS = """<svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -403,26 +403,21 @@ APPS = [
 ]
 
 
-# Hop's mark isn't a glyph after the word: a lime arc hops from the top of the h to the p and
-# ends in a dot (same as hop/ui/styles.css .mark .arc). Coordinates are in 1/100 em.
-HOP_PATH = "M16.5,10 Q80,-75 145,20"
-HOP_SVG = ('<svg class="harc" viewBox="0 -45 176 145" aria-hidden="true">'
-           f'<path d="{HOP_PATH}" pathLength="1"/><circle cx="145" cy="20" r="7.5"/></svg>')
-MARKS = {"hop": f'<span class="hopw">hop{HOP_SVG}</span>'}
+# Marks. Each app's mark, used in the nav, the footer and the rendered icons, and each app's
+# hero version, which carries its own intro animation (see "per-app marks" in style.css).
+LUT_MARK = ('<span class="lutw"><span class="base">lut</span><span class="lime" aria-hidden="true">lut</span>'
+            '<i class="gbar" aria-hidden="true"></i></span>')
+HOP_MARK = '<span class="hopw">h<span class="o">o</span>p<i class="sh" aria-hidden="true"></i></span>'
+MARKS = {"lut": LUT_MARK, "hop": HOP_MARK}
 
-# Each app's own logo animation, matching the app. Apps without one use the letters-rise
-# reveal from dwn.pxlvzn.in.
 HERO_MARKS = {
-    # Stm: a playhead sweeps across and reveals the word, then the bars jump like level meters
-    # (same as stm/ui/styles.css: play-in, head-run, meter-a..d).
-    "stm": '<div class="hero-mark wordmark anim-stm" aria-hidden="true"><span class="play"><span class="word">stm</span><i class="head"></i></span>'
-           '<i class="bars"><b></b><b></b><b></b><b></b></i></div>',
-    # Hop: letters spring up one after another, then a ball leaves the top of the h, follows the
-    # arc as it draws in, lands on the p with a squash and the p dips (hop/ui/app.js playSplash).
-    "hop": '<div class="hero-mark wordmark anim-hop" aria-hidden="true"><span class="hopw">'
-           '<span class="ch">h</span><span class="ch">o</span><span class="ch p">p</span>'
-           f'<svg class="harc" viewBox="0 -45 176 145"><path d="{HOP_PATH}" pathLength="1"/>'
-           '<circle class="ball" cx="0" cy="0" r="7.5"/></svg></span></div>',
+    "stm": ('<div class="hero-mark wordmark anim-stm" aria-hidden="true"><span class="stmw">'
+            '<span class="play"><span class="word">stm</span><i class="head"></i></span>'
+            '<i class="bars"><b></b><b></b><b></b><b></b></i></span></div>'),
+    "lut": f'<div class="hero-mark wordmark anim-lut" aria-hidden="true">{LUT_MARK}</div>',
+    "hop": ('<div class="hero-mark wordmark anim-hop" aria-hidden="true"><span class="hopw">'
+            '<span class="ch">h</span><span class="o">o</span><span class="ch p">p</span>'
+            '<i class="sh"></i></span></div>'),
 }
 
 
