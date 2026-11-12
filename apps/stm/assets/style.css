@@ -450,8 +450,8 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
 
 /* Hop: "hop" followed by a lime up-right arrow, the send counterpart to Dwn's down arrow (as in the app). */
 .hopw { position: relative; display: inline-block; }
-.hopw .go { position: relative; display: inline-block; width: 0.46em; height: 0.46em; margin-left: 0.07em;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M3 17L16 4M6 4h10v10' stroke='%23ccff4d' stroke-width='4.6' fill='none' stroke-linecap='square'/%3E%3C/svg%3E") center/contain no-repeat; }
+.hopw .go { position: relative; display: inline-block; width: 0.46em; height: 0.46em; margin-left: 0.04em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4.6 4.6 100 100'%3E%3Cpath transform='rotate(45 50 50)' fill='%23ccff4d' d='M33 46V83A17 17 0 0 0 67 83V46H100L50 0L0 46Z'/%3E%3C/svg%3E") center/contain no-repeat; }
 
 /* Hop intro: the letters spring up one after another, then the arrow shoots in from the lower
    left with an overshoot, trailing a lime streak that fades behind it, as if it just sent
