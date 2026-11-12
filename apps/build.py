@@ -14,6 +14,7 @@ and is committed, so Vercel deploys it as plain files with no build step.
 
 import html
 import pathlib
+import json
 import shutil
 
 HERE = pathlib.Path(__file__).resolve().parent
@@ -446,7 +447,11 @@ def build(app):
                   description=html.escape(app["description"], quote=True), og=html.escape(app["og"], quote=True))
     (out / "index.html").write_text(PAGE.format(**fields))
     (out / "404.html").write_text(NOT_FOUND.format(**fields))
-    (out / "vercel.json").write_text(VERCEL)
+    # Keep keys an app adds to its own vercel.json (Hop's relay API has crons and functions).
+    cfg, vj = json.loads(VERCEL), out / "vercel.json"
+    if vj.exists():
+        cfg = {**json.loads(vj.read_text()), **cfg}
+    vj.write_text(json.dumps(cfg, indent=2) + "\n")
     for f in ("style.css", "main.js"):
         shutil.copyfile(SHARED / f, out / "assets" / f)
     print("built", out.relative_to(HERE.parent))
