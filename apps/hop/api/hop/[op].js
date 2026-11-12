@@ -2,12 +2,12 @@
 // See _lib.js for what's stored and why the service only ever sees ciphertext.
 import { del } from '@vercel/blob';
 import {
-  CHUNK, HttpError, KEEP_DAYS, MAX_BYTES, TID, codeOf, exists, getUrl, listAll, normCode, putUrl, readJson,
-  removePrefix, until, verify, writeJson,
+  HttpError, KEEP_DAYS, MAX_BYTES, PIECE, TID, exists, getUrl, listAll, normCode, putUrl, readJson,
+  removePrefix, ring, verify, writeJson,
 } from './_lib.js';
 
 const MAX_BATCH = 256;
-const maxPieces = Math.ceil(MAX_BYTES / CHUNK) + 2000; // + one piece per empty or small file
+const maxPieces = Math.ceil(MAX_BYTES / PIECE) + 2000; // + one piece per empty or small file
 
 async function body(req) {
   if (req.body && typeof req.body === 'object') return req.body;
@@ -34,15 +34,12 @@ async function batch(prefix, start, count, total, fn) {
 }
 
 const ops = {
-  // Publish (or refresh) this device's code, key and name. Returns its doorbell URL.
+  // Publish this device's code, key and name (the app calls this only when they change).
   async register(b) {
     const code = verify('register', b, ['name']);
     const name = String(b.name || '').slice(0, 40);
-    const old = await readJson(`dir/${code}.json`);
-    if (!old || old.name !== name || Date.now() - (old.at || 0) > 24 * 3600 * 1000) {
-      await writeJson(`dir/${code}.json`, { vk: b.vk, name, at: Date.now() });
-    }
-    return { code, bell: await getUrl(`bell/${code}`, true), until: await until(), max_bytes: MAX_BYTES };
+    await writeJson(`dir/${code}.json`, { vk: b.vk, name, at: Date.now() });
+    return { code, max_bytes: MAX_BYTES, piece: PIECE };
   },
 
   // Who is this code? The app checks the key against the code itself.
@@ -85,7 +82,7 @@ const ops = {
     if (m.from !== from) throw new HttpError(403, 'not your transfer');
     if (!(await exists(`x/${tid}/offer`))) throw new HttpError(409, 'offer missing');
     await writeJson(`inbox/${m.to}/${tid}.json`, { tid, from, at: Date.now() });
-    await writeJson(`bell/${m.to}`, { at: Date.now() });
+    await ring(m.to);
     return { ok: true };
   },
 
@@ -98,7 +95,7 @@ const ops = {
       if (!TID.test(tid)) return null;
       return { tid, at: new Date(bl.uploadedAt).getTime(), offer: await getUrl(`x/${tid}/offer`) };
     }));
-    return { items: items.filter(Boolean), bell: await getUrl(`bell/${code}`, true), until: await until() };
+    return { items: items.filter(Boolean) };
   },
 
   // Download URLs for a range of pieces (recipient only).
