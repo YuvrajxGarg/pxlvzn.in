@@ -17,6 +17,7 @@ const APPS = {
   lut: { mark: '<span class="lutw" style="--knock:#1f1f21"><span class="base">lut</span><span class="lime">lut</span><i class="gbar"></i></span>', tagline: "Match the colour of one shot to another." },
   hop: { mark: '<span class="hopw">hop<i class="go"></i></span>', tagline: "Send files between your devices. No cloud." },
   // Syn uses the outlined brand mark (apps/_shared/syn/mark.svg) rather than live text.
+  pin: { mark: '<span class="pinw">p<span class="pi">\u0131<i class="head"></i></span>n</span>', tagline: "Your Pinterest feed, as a screensaver." },
   syn: { mark: `<img class="synmark" src="data:image/svg+xml;base64,${fs.readFileSync(path.join(__dirname, "_shared", "syn", "mark.svg")).toString("base64")}">`, tagline: "Sync every camera and mic by sound." },
 };
 

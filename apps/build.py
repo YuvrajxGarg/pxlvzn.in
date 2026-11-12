@@ -5,6 +5,7 @@
     lut.pxlvzn.in   apps/lut/
     hop.pxlvzn.in   apps/hop/
     syn.pxlvzn.in   apps/syn/
+    pin.pxlvzn.in   apps/pin/
 
     python3 apps/build.py
 
@@ -21,7 +22,7 @@ import shutil
 
 HERE = pathlib.Path(__file__).resolve().parent
 SHARED = HERE / "_shared"
-ASSET_VERSION = "7"  # bump to make browsers refetch style.css and main.js
+ASSET_VERSION = "8"  # bump to make browsers refetch style.css and main.js
 
 GLYPHS = {
     "stems": '<i class="g g-stems" aria-hidden="true"></i>',
@@ -29,6 +30,7 @@ GLYPHS = {
     "cube": "",
     "hop": "",
     "sync": "",
+    "pin": "",
 }
 
 ICONS = """<svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -182,7 +184,7 @@ PAGE = """<!doctype html>
         </div>
         <div class="pxl-note">
           <span class="pm">pxl<i></i></span>
-          <p>{name} is part of <a href="https://pxlvzn.in">PXL</a>, the free app that installs, opens and updates every PXLVZN app, including <a href="https://dwn.pxlvzn.in">Dwn</a>, <a href="https://tag.pxlvzn.in">Tag</a>, Stm, Lut, Hop and Syn. Already have PXL? {name} shows up in its app list once it is released.</p>
+          <p>{name} is part of <a href="https://pxlvzn.in">PXL</a>, the free app that installs, opens and updates every PXLVZN app, including <a href="https://dwn.pxlvzn.in">Dwn</a>, <a href="https://tag.pxlvzn.in">Tag</a>, Stm, Lut, Hop, Syn and Pin. Already have PXL? {name} shows up in its app list once it is released.</p>
         </div>
         <p class="meta" style="margin-top:26px"><a href="https://github.com/YuvrajxGarg/{id}/releases" data-notes>Release notes</a> · <a href="https://github.com/YuvrajxGarg/{id}">Source code</a></p>
       </div>
@@ -384,6 +386,37 @@ SYN_DEMO = (f"""          <div class="bar"><i></i><i></i><i></i><span>Syn</span>
             </div>
           </div>""")
 
+# ------------------------------------------------------------------------- Pin
+# The screensaver itself: masonry columns of pins drifting upward at slightly different
+# speeds, a clock in the corner. One pin gets hidden mid-scroll (it folds away), the way
+# hiding a pin in the app takes it out of the screensaver.
+PIN_PALETTE = [("#3a2f5c", "#c06c84"), ("#1f3b4d", "#5fb3b3"), ("#4a3b1f", "#e0a458"), ("#2b3a2b", "#8fbf6a"),
+               ("#3d1f2b", "#e05a6b"), ("#232946", "#b8c1ec"), ("#1b262c", "#3282b8"), ("#2d2424", "#e0c097"),
+               ("#2a1f3d", "#9d7bd8"), ("#123", "#5f9ea0"), ("#3b2a20", "#d9a066"), ("#202a25", "#a3c9a8")]
+PIN_RATIOS = [1.5, 1.2, 1.78, 1.0, 1.33, 2.0, 0.8, 1.6, 1.25, 1.4, 1.1, 1.7]
+PIN_SHAPES = ["circle", "arch", "bars", "sun", "blob", "lines"]
+
+
+def pin_tile(n, hide=False):
+    a, b = PIN_PALETTE[n % len(PIN_PALETTE)]
+    r = PIN_RATIOS[(n * 7) % len(PIN_RATIOS)]
+    shape = PIN_SHAPES[(n * 5) % len(PIN_SHAPES)]
+    return (f'<div class="pt s-{shape}{" hide" if hide else ""}" style="--a:{a};--b:{b};--r:{r};--k:{n % 5}">'
+            f'<i></i><b></b>{"<span class=pt-x>Hidden</span>" if hide else ""}</div>')
+
+
+def pin_col(c, count, hide_at=None):
+    tiles = "".join(pin_tile(c * 11 + j, j == hide_at) for j in range(count))
+    # Each column holds its tiles twice so the upward loop is seamless.
+    return f'<div class="pcol" style="--c:{c}"><div class="ptrack">{tiles}{tiles}</div></div>'
+
+
+PIN_DEMO = ('''          <div class="bar"><i></i><i></i><i></i><span>Pin</span><span class="r">Screensaver · your home feed · 186 pins</span></div>
+          <div class="body pin-wall">
+''' + "\n".join("            " + pin_col(c, 6, 2 if c == 2 else None) for c in range(5)) + '''
+            <div class="pclock"><b>9:41</b><small>Thursday 12 November</small></div>
+          </div>''')
+
 APPS = [
     dict(
         id="tag", name="Tag", glyph="strike",
@@ -538,6 +571,39 @@ APPS = [
         win_note="Run the setup. It adds Syn to the Start menu. If SmartScreen appears, click <b>More info</b>, then <b>Run anyway</b>.",
         fine="Syn reads and writes Premiere Pro XML. The timeline above is drawn in HTML, not a screenshot.",
     ),
+    dict(
+        id="pin", name="Pin", glyph="pin",
+        tagline="Your Pinterest feed, as a screensaver.",
+        tagline_html='<span class="t-thin">Your Pinterest feed,</span> <span class="t-bold">as a screensaver.</span>',
+        description="Pin is a free screensaver for Mac and Windows that fills your screen with a slowly scrolling wall of pins from your Pinterest home feed or any public board, plus an app to see, save and hide them.",
+        og="A slowly scrolling wall of your pins whenever your computer idles, and an app to save or hide them. Free for Mac and Windows.",
+        lede="When your computer idles, Pin fills the screen with a slow, drifting wall of pins from your home feed or any public board. The Pin app shows every pin it has, saves the ones you love as images, and hides the ones you never want to see again.",
+        os_line="macOS and Windows",
+        demo=PIN_DEMO, demo_label="A screensaver of pin images in five masonry columns drifting upward at different speeds, with a clock in the corner. One pin folds away as it is hidden.",
+        caption="Columns drift at their own pace, so the wall never looks like it's repeating.",
+        features_title='Your feed on the big screen. <span class="thin">On your terms.</span>',
+        features_lede="A screensaver that feels like scrolling Pinterest with your hands off the keyboard, and an app to curate it.",
+        cards=[
+            card("span-3 wide", "layers", "A living wall of pins", "Masonry columns drift upward at slightly different speeds, pins recycle as they leave the top, and a new batch arrives every few minutes. Multiple displays get their own wall.", '<div class="chips" aria-label="Sources"><span class="chip on">Home feed</span><span class="chip on">Any profile</span><span class="chip on">Any board</span><span class="chip">Clock</span></div>', lime=True),
+            card("span-3 wide", "eye", "Hide what you don't want", "Hide a pin in the app and it never shows in the screensaver again, and isn't downloaded again either. Changed your mind? It's one click to bring it back."),
+            card("span-2", "down", "Save the good ones", "Save any pin, or a whole selection, as a normal JPG or PNG. Or copy it straight to the clipboard."),
+            card("span-2", "resume", "Refresh on demand", "Pull a fresh batch of pins whenever you like, or start over with an entirely new set."),
+            card("span-2", "bolt", "Works offline", "Up to 200 pins are kept on disk, so the screensaver starts instantly, even without Wi-Fi."),
+        ],
+        how_title='Install it once. <span class="thin">Then just walk away.</span>',
+        how_lede="Pin sets up the screensaver for you and keeps it updated.",
+        steps=[step("Pick a source", "Your own home feed, or any public profile or board, like <code>nasa/space</code>."),
+               step("Install the screensaver", "One click in Pin. It shows up in Screen Saver settings on Mac and Windows."),
+               step("Curate", "Open Pin any time to save pins you love and hide the ones you don't.")],
+        private_lede="Pin has no servers and no account of its own. Pins come straight from Pinterest to your computer, and your session cookie, if you use your home feed, never leaves it except to talk to pinterest.com.",
+        servers_line="Pins download straight from Pinterest. Nothing of yours goes anywhere else.",
+        mac_req="macOS 12 or later · Apple silicon",
+        mac_url="https://github.com/YuvrajxGarg/pin/releases/latest/download/Pin.dmg",
+        win_url="https://github.com/YuvrajxGarg/pin/releases/latest/download/Pin-Setup.exe",
+        mac_note="Open it and drag <b>Pin</b> to Applications. The first time, right-click it and choose <b>Open</b>, then click <b>Allow</b> when macOS asks about data from other apps.",
+        win_note="Run the setup. It adds Pin to the Start menu. If SmartScreen appears, click <b>More info</b>, then <b>Run anyway</b>.",
+        fine="Pin is not affiliated with Pinterest. The wall above is drawn in HTML, not real pins.",
+    ),
 ]
 
 
@@ -550,7 +616,9 @@ TAG_MARK = '<span class="tagw">tag<i class="strike" aria-hidden="true"></i></spa
 # Syn's static mark is the outlined brand SVG (apps/_shared/syn/mark.svg, from the syn repo's
 # brand/make_mark.py), so it looks the same on every OS and in the app and Premiere panel.
 SYN_MARK = '<img class="synmark" src="/assets/mark.svg" alt="" width="62" height="26">'
-MARKS = {"tag": TAG_MARK, "lut": LUT_MARK, "hop": HOP_MARK, "syn": SYN_MARK}
+# Pin: "pin" with a dotless i whose dot is a lime pin head (as in the app's icon).
+PIN_MARK = '<span class="pinw">p<span class="pi">\u0131<i class="head" aria-hidden="true"></i></span>n</span>'
+MARKS = {"tag": TAG_MARK, "lut": LUT_MARK, "hop": HOP_MARK, "syn": SYN_MARK, "pin": PIN_MARK}
 
 HERO_MARKS = {
     "tag": ('<div class="hero-mark wordmark anim-tag" aria-hidden="true"><span class="tagw">'
@@ -569,6 +637,9 @@ HERO_MARKS = {
             '<span class="ch">s</span><span class="ch">y</span><span class="ch">n</span>'
             '<i class="link"><b></b><i></i><b></b></i><i class="bl"></i></span>'
             '<img class="rest" src="/assets/mark.svg" alt=""></div>'),
+    "pin": ('<div class="hero-mark wordmark anim-pin" aria-hidden="true"><span class="pinw">'
+            '<span class="ch">p</span><span class="ch pi">\u0131<i class="ripple"></i><i class="head"></i></span>'
+            '<span class="ch">n</span></span></div>'),
 }
 
 
