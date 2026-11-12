@@ -74,7 +74,7 @@ fetch(`https://api.github.com/repos/${REPO}/releases/latest`, { headers: { Accep
 const OUT = '<svg><use href="#out"/></svg>';
 function mark(m = {}) {
   if (m.glyph === "wipe") return `<span class="mk"><span class="lutw"><span>${esc(m.text)}</span><span class="lime" aria-hidden="true">${esc(m.text)}</span><i class="gbar"></i></span></span>`;
-  const g = m.glyph === "arrow" ? '<svg class="arrow"><use href="#arrow"/></svg>' : m.glyph === "strike" ? '<i class="strike"></i>' : m.glyph === "pixel" ? '<i class="px"></i>' : m.glyph === "go" ? '<i class="go"></i>' : "";
+  const g = m.glyph === "arrow" ? '<svg class="arrow"><use href="#arrow"/></svg>' : m.glyph === "strike" ? '<i class="strike"></i>' : m.glyph === "pixel" ? '<i class="px"></i>' : m.glyph === "go" ? '<i class="go"></i>' : m.glyph === "tracks" ? '<i class="bars"><b></b><b></b><b></b><b></b></i>' : "";
   return `<span class="mk">${esc(m.text)}${g}</span>`;
 }
 function appCard(a, newest) {

@@ -407,6 +407,14 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
 .tile .mk .strike { position: absolute; left: -.1em; right: -.08em; top: .53em; height: .13em; border-radius: .1em; background: var(--accent); box-shadow: 0 0 0 .05em #1d1d1f; }
 .tile .mk .px { display: inline-block; width: .19em; height: .19em; background: var(--accent); margin-left: .06em; }
 /* Lut: the word cut by a lime grading bar at 57%, lime to the right of it. Hop: a lime ↗ arrow. */
+/* Stm: one lime line split into four track lines. */
+.tile .mk .bars { display: inline-block; width: .5em; margin-left: .08em; }
+.tile .mk .bars b { display: block; height: .075em; border-radius: .04em; background: var(--accent); }
+.tile .mk .bars b + b { margin-top: .0733em; }
+.tile .mk .bars b:nth-child(1) { width: 100%; }
+.tile .mk .bars b:nth-child(2) { width: 60%; }
+.tile .mk .bars b:nth-child(3) { width: 85%; }
+.tile .mk .bars b:nth-child(4) { width: 42%; }
 .tile .mk .lutw { position: relative; display: inline-block; }
 .tile .mk .lutw .lime { position: absolute; inset: 0; color: var(--accent); clip-path: inset(-0.3em -0.3em -0.3em 57%); }
 .tile .mk .lutw .gbar { position: absolute; left: 57%; top: 0.095em; bottom: -0.065em; width: 0.075em; margin-left: -0.0375em;
