@@ -415,7 +415,7 @@ MARKS = {"lut": LUT_MARK, "hop": HOP_MARK}
 
 HERO_MARKS = {
     "stm": ('<div class="hero-mark wordmark anim-stm" aria-hidden="true"><span class="stmw">'
-            '<span class="word-wrap"><span class="word">stm</span><span class="sl l1">stm</span><span class="sl l2">stm</span><span class="sl l3">stm</span><span class="sl l4">stm</span></span>'
+            '<span class="ch">s</span><span class="ch">t</span><span class="ch">m</span>'
             '<i class="bars"><b></b><b></b><b></b><b></b></i></span></div>'),
     "lut": ('<div class="hero-mark wordmark anim-lut" aria-hidden="true"><span class="lutw"><span class="base"><b>l</b><b>u</b><b>t</b></span>'
             '<span class="lime">lut</span>'
