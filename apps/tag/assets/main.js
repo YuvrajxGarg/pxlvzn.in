@@ -107,6 +107,22 @@
     requestAnimationFrame(tick);
   }
 
+  // ---------------------------------------------------------------- Syn resting mark
+  // Lines the outlined SVG up on the live intro's baseline, so the cross-fade doesn't jump.
+  const syn = $(".hero-mark.anim-syn");
+  if (syn) {
+    const place = () => {
+      const w = $(".synw", syn), bl = $(".bl", syn), img = $("img.rest", syn);
+      const fs = parseFloat(getComputedStyle(syn).fontSize);
+      img.style.top = (w.offsetTop + bl.offsetTop - (1159 / 2048) * fs).toFixed(2) + "px";
+      img.style.left = (w.offsetLeft - (82 / 2048) * fs).toFixed(2) + "px";
+      syn.classList.add("placed");
+    };
+    place();
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(place);
+    addEventListener("resize", place);
+  }
+
   // ---------------------------------------------------------------- reveals
   const items = $$(".reveal");
   if ("IntersectionObserver" in window) {

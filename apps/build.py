@@ -547,7 +547,9 @@ LUT_MARK = ('<span class="lutw"><span class="base">lut</span><span class="lime" 
             '<i class="gbar" aria-hidden="true"></i></span>')
 HOP_MARK = '<span class="hopw">hop<i class="go" aria-hidden="true"></i></span>'
 TAG_MARK = '<span class="tagw">tag<i class="strike" aria-hidden="true"></i></span>'
-SYN_MARK = '<span class="synw">syn<i class="link" aria-hidden="true"><b></b><i></i><b></b></i></span>'
+# Syn's static mark is the outlined brand SVG (apps/_shared/syn/mark.svg, from the syn repo's
+# brand/make_mark.py), so it looks the same on every OS and in the app and Premiere panel.
+SYN_MARK = '<img class="synmark" src="/assets/mark.svg" alt="" width="62" height="26">'
 MARKS = {"tag": TAG_MARK, "lut": LUT_MARK, "hop": HOP_MARK, "syn": SYN_MARK}
 
 HERO_MARKS = {
@@ -565,7 +567,8 @@ HERO_MARKS = {
             '<i class="go"><i class="streak"></i></i></span></div>'),
     "syn": ('<div class="hero-mark wordmark anim-syn" aria-hidden="true"><span class="synw">'
             '<span class="ch">s</span><span class="ch">y</span><span class="ch">n</span>'
-            '<i class="link"><b></b><i></i><b></b></i></span></div>'),
+            '<i class="link"><b></b><i></i><b></b></i><i class="bl"></i></span>'
+            '<img class="rest" src="/assets/mark.svg" alt=""></div>'),
 }
 
 
@@ -601,6 +604,8 @@ def build(app):
     vj.write_text(json.dumps(cfg, indent=2) + "\n")
     for f in ("style.css", "main.js"):
         shutil.copyfile(SHARED / f, out / "assets" / f)
+    if (SHARED / app["id"] / "mark.svg").exists():
+        shutil.copyfile(SHARED / app["id"] / "mark.svg", out / "assets" / "mark.svg")
     print("built", out.relative_to(HERE.parent))
 
 

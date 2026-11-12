@@ -16,7 +16,8 @@ const APPS = {
   stm: { glyph: '<i class="g g-stems"></i>', tagline: "Split any song into its stems." },
   lut: { mark: '<span class="lutw" style="--knock:#1f1f21"><span class="base">lut</span><span class="lime">lut</span><i class="gbar"></i></span>', tagline: "Match the colour of one shot to another." },
   hop: { mark: '<span class="hopw">hop<i class="go"></i></span>', tagline: "Send files between your devices. No cloud." },
-  syn: { mark: '<span class="synw">syn<i class="link"><b></b><i></i><b></b></i></span>', tagline: "Sync every camera and mic by sound." },
+  // Syn uses the outlined brand mark (apps/_shared/syn/mark.svg) rather than live text.
+  syn: { mark: `<img class="synmark" src="data:image/svg+xml;base64,${fs.readFileSync(path.join(__dirname, "_shared", "syn", "mark.svg")).toString("base64")}">`, tagline: "Sync every camera and mic by sound." },
 };
 
 const page = (body, w, h) => `<!doctype html><html><head><style>${CSS}
