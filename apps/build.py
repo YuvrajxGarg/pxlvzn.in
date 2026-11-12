@@ -410,19 +410,19 @@ APPS = [
 # hero version, which carries its own intro animation (see "per-app marks" in style.css).
 LUT_MARK = ('<span class="lutw"><span class="base">lut</span><span class="lime" aria-hidden="true">lut</span>'
             '<i class="gbar" aria-hidden="true"></i></span>')
-HOP_MARK = '<span class="hopw">hop<i class="path" aria-hidden="true"></i><i class="file" aria-hidden="true"></i></span>'
+HOP_MARK = '<span class="hopw">hop<i class="go" aria-hidden="true"></i></span>'
 MARKS = {"lut": LUT_MARK, "hop": HOP_MARK}
 
 HERO_MARKS = {
     "stm": ('<div class="hero-mark wordmark anim-stm" aria-hidden="true"><span class="stmw">'
-            '<span class="play"><span class="word">stm</span><i class="head"></i></span>'
+            '<span class="word-wrap"><span class="word">stm</span><span class="sl l1">stm</span><span class="sl l2">stm</span><span class="sl l3">stm</span><span class="sl l4">stm</span></span>'
             '<i class="bars"><b></b><b></b><b></b><b></b></i></span></div>'),
     "lut": ('<div class="hero-mark wordmark anim-lut" aria-hidden="true"><span class="lutw"><span class="base">lut</span>'
             '<span class="rgb"><b>lut</b><b>lut</b><b>lut</b></span><span class="lime">lut</span>'
             '<i class="gbar"></i></span></div>'),
     "hop": ('<div class="hero-mark wordmark anim-hop" aria-hidden="true"><span class="hopw">'
             '<span class="ch">h</span><span class="ch">o</span><span class="ch">p</span>'
-            '<i class="path l"></i><i class="path r"></i><i class="fx"><i class="file"></i></i></span></div>'),
+            '<i class="go"><i class="streak"></i></i></span></div>'),
 }
 
 

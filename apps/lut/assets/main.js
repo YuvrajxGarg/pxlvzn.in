@@ -103,54 +103,6 @@
     requestAnimationFrame(tick);
   }
 
-  // ---------------------------------------------------------------- Stm intro bars
-  // One continuous curve per bar, so nothing snaps: the bars rise together as one wide bar (the
-  // whole song), pulse once with the word, split apart onto their own levels with a spring, then
-  // bounce like live meters with an envelope that fades to exactly zero at their resting heights.
-  const stm = $(".anim-stm");
-  if (stm) {
-    const bars = $$(".bars b", stm), play = $(".play", stm);
-    const H = [0.55, 1, 0.35, 0.75], STEP = 0.1, MERGED = 0.9;
-    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const clamp = (v) => Math.min(1, Math.max(0, v));
-    const outBack = (t) => 1 + 2.2 * Math.pow(t - 1, 3) + 1.2 * Math.pow(t - 1, 2);
-    const inOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-    const spring = (t) => 1 - Math.exp(-6 * t) * Math.cos(9 * t); // 0 to 1 with one soft overshoot
-    const T0 = 0.8, RISE = 0.4, PULSE = 0.35, SPLIT = 0.75, DANCE = 2.2, END = RISE + PULSE + SPLIT + DANCE;
-    const FREQ = [3.1, 2.3, 3.7, 2.7], PHASE = [0, 1.3, 2.1, 0.6], AMP = [0.6, 0.25, 0.6, 0.45];
-    const frame = (t) => {
-      // t: seconds since the bars start
-      const rise = outBack(clamp(t / RISE));
-      const pulse = Math.sin(Math.PI * clamp((t - RISE) / PULSE)) * 0.12;
-      const split = clamp((t - RISE - PULSE) / SPLIT);
-      const sx = inOut(split), sy = spring(split * 1.15);
-      const d = clamp((t - RISE - PULSE - SPLIT) / DANCE);
-      const env = Math.sin(Math.PI * d) * (1 - d) * 1.6; // 0 at both ends, peaks early
-      const merged = MERGED * (rise + pulse);
-      bars.forEach((b, i) => {
-        const level = H[i] * (1 + env * AMP[i] * Math.sin(FREQ[i] * Math.PI * 2 * t + PHASE[i]));
-        const h = merged + (level - merged) * sy;
-        const x = (1.5 - i) * STEP * (1 - sx);
-        const w = 2.4 - 1.4 * sx;
-        b.style.transform = `translateX(${x.toFixed(4)}em) scale(${w.toFixed(4)}, ${Math.max(0, h / H[i]).toFixed(4)})`;
-      });
-      if (play) play.style.transform = pulse > 0.0005 ? `scale(${(1 + pulse * 0.25).toFixed(4)})` : "";
-      return t < END;
-    };
-    if (reduce) bars.forEach((b) => (b.style.transform = "none"));
-    else {
-      let start = null;
-      const tick = (now) => {
-        if (start === null) start = now;
-        const t = (now - start) / 1000 - T0;
-        if (t < 0) return requestAnimationFrame(tick);
-        if (frame(t)) requestAnimationFrame(tick);
-        else { bars.forEach((b) => (b.style.transform = "none")); if (play) play.style.transform = ""; }
-      };
-      requestAnimationFrame(tick);
-    }
-  }
-
   // ---------------------------------------------------------------- reveals
   const items = $$(".reveal");
   if ("IntersectionObserver" in window) {
