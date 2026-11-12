@@ -402,6 +402,13 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
 .tile .mk .arrow { width: .36em; height: .56em; fill: var(--accent); margin-left: .04em; }
 .tile .mk .strike { position: absolute; left: -.1em; right: -.08em; top: .53em; height: .13em; border-radius: .1em; background: var(--accent); box-shadow: 0 0 0 .05em #1d1d1f; }
 .tile .mk .px { display: inline-block; width: .19em; height: .19em; background: var(--accent); margin-left: .06em; }
+/* Lut: the word cut by a lime grading bar at 57%, lime to the right of it. Hop: a lime ↗ arrow. */
+.tile .mk .lutw { position: relative; display: inline-block; }
+.tile .mk .lutw .lime { position: absolute; inset: 0; color: var(--accent); clip-path: inset(-0.3em -0.3em -0.3em 57%); }
+.tile .mk .lutw .gbar { position: absolute; left: 57%; top: 0.095em; bottom: -0.065em; width: 0.075em; margin-left: -0.0375em;
+  border-radius: 0.02em; background: var(--accent); box-shadow: 0 0 0 0.045em #1d1d1f; }
+.tile .mk .go { display: inline-block; flex: none; width: 0.46em; height: 0.46em; margin-left: 0.04em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2.46 -2.46 100 100'%3E%3Cpath transform='rotate(45 50 50)' fill='%23ccff4d' d='M33 46V83A17 17 0 0 0 67 83V46H98L50 -14L2 46Z'/%3E%3C/svg%3E") center/contain no-repeat; }
 .tile.ghost { background: none; border: 1.5px dashed rgba(255, 255, 255, .16); box-shadow: none; color: var(--text3); font: 300 30px/1 var(--display); }
 .big-tile { --t: 96px; margin: 0 auto 22px; }
 

@@ -367,37 +367,25 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
   border-radius: 0.02em; background: var(--accent); box-shadow: 0 0 0 0.045em var(--knock); }
 .nav .lutw { --knock: #0e0e0f; }
 
-/* Lut intro: the word is printed as three colour channels, red, green and blue, each scanned in
-   from the left, offset like misregistered film. They slide into register and add up to white (a
-   LUT is exactly that: a per-channel mapping). Then the grading bar drags in from the right,
-   turning everything it passes lime, overshoots to 30% and settles at 57%. The colour only ever
-   changes where the bar is, so there is no flicker or hue cycling. */
+/* Lut intro: the word develops from a hairline. Each letter fades in at weight 100 and swells to
+   the full 900, one after another, like pulling up the contrast on flat log footage. Then the
+   grading bar drags in from the right, turning everything it passes lime, overshoots to 30% and
+   settles at 57%. The colour only ever changes where the bar is, so there is no flicker. */
 .anim-lut .lutw { --x: 104%; }
-.anim-lut .base { opacity: 0; }
-.anim-lut .rgb { position: absolute; inset: 0; isolation: isolate; opacity: 0.94; }
-.anim-lut .rgb b { position: absolute; inset: 0; font-weight: inherit; mix-blend-mode: screen; will-change: transform, clip-path;
-  clip-path: inset(-0.3em calc(100% + 0.3em) -0.3em -0.3em); }
-.anim-lut .rgb b:nth-child(1) { color: #ff2a3d; --dx: -0.11em; --dy: -0.02em; --t: 0s; }
-.anim-lut .rgb b:nth-child(2) { color: #2aff5a; --dx: 0em; --dy: 0.02em; --t: 0.08s; }
-.anim-lut .rgb b:nth-child(3) { color: #3d5cff; --dx: 0.11em; --dy: 0em; --t: 0.16s; }
-.anim-lut .rgb b { transform: translate(var(--dx), var(--dy)); }
-.anim-lut .lime { z-index: 1; }
+.anim-lut .base b { display: inline-block; font-weight: inherit; opacity: 0; font-weight: 100; }
+.anim-lut .lime { z-index: 1; opacity: 0; }
 .anim-lut .gbar { z-index: 2; opacity: 0; }
-.ready .anim-lut .rgb b { animation: lut-scan 0.5s cubic-bezier(.4, 0, .2, 1) var(--t) forwards,
-  lut-register 0.75s cubic-bezier(.65, 0, .25, 1) calc(var(--t) + 0.3s) forwards; }
-/* Once in register, the white base takes over from the channels so no colour fringes stay behind. */
-.ready .anim-lut .base { animation: lut-fade 0.2s linear 1.2s forwards; }
-.ready .anim-lut .rgb { animation: lut-off 0s linear 1.4s forwards; }
-@keyframes lut-fade { from { opacity: 0; } to { opacity: 1; } }
-@keyframes lut-off { to { opacity: 0; } }
+.ready .anim-lut .base b { animation: lut-develop 0.9s cubic-bezier(.3, 0, .15, 1) forwards; }
+.ready .anim-lut .base b:nth-child(2) { animation-delay: 0.1s; }
+.ready .anim-lut .base b:nth-child(3) { animation-delay: 0.2s; }
+@keyframes lut-develop { 0% { opacity: 0; font-weight: 100; } 25% { opacity: 1; } 100% { opacity: 1; font-weight: 900; } }
 .ready .anim-lut .lutw { animation: lut-wipe 1.15s cubic-bezier(.55, 0, .25, 1) 1.05s forwards; }
-.ready .anim-lut .gbar { animation: lut-bar-in 0.2s ease-out 1.05s forwards, lut-glow 1s ease-out 1.75s; }
-@keyframes lut-scan { to { clip-path: inset(-0.3em -0.3em -0.3em -0.3em); } }
-@keyframes lut-register { to { transform: translate(0, 0); } }
+.ready .anim-lut .gbar, .ready .anim-lut .lime { animation: lut-bar-in 0.2s ease-out 1.05s forwards, lut-glow 1s ease-out 1.75s; }
+.ready .anim-lut .lime { animation: lut-bar-in 0s linear 1.05s forwards; }
 @keyframes lut-wipe { 0% { --x: 104%; } 60% { --x: 30%; } 100% { --x: 57%; } }
 @keyframes lut-bar-in { to { opacity: 1; } }
 @keyframes lut-glow { 0% { box-shadow: 0 0 0 0.045em var(--knock), 0 0 0.5em var(--accent); } 100% { box-shadow: 0 0 0 0.045em var(--knock), 0 0 0 transparent; } }
-.no-js .anim-lut .lutw { --x: 57%; } .no-js .anim-lut .base { opacity: 1; } .no-js .anim-lut .rgb { display: none; } .no-js .anim-lut .gbar { opacity: 1; }
+.no-js .anim-lut .lutw { --x: 57%; } .no-js .anim-lut .base b { opacity: 1; font-weight: 900; } .no-js .anim-lut .gbar, .no-js .anim-lut .lime { opacity: 1; }
 
 /* Stm: "stm" plus four lime level bars (55/100/35/75%). Static version is .g-stems above. */
 .stmw { display: inline-flex; align-items: baseline; }
@@ -451,7 +439,7 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
 /* Hop: "hop" followed by a lime up-right arrow, the send counterpart to Dwn's down arrow (as in the app). */
 .hopw { position: relative; display: inline-block; }
 .hopw .go { position: relative; display: inline-block; width: 0.46em; height: 0.46em; margin-left: 0.04em;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4.6 4.6 100 100'%3E%3Cpath transform='rotate(45 50 50)' fill='%23ccff4d' d='M33 46V83A17 17 0 0 0 67 83V46H100L50 0L0 46Z'/%3E%3C/svg%3E") center/contain no-repeat; }
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2.46 -2.46 100 100'%3E%3Cpath transform='rotate(45 50 50)' fill='%23ccff4d' d='M33 46V83A17 17 0 0 0 67 83V46H98L50 -14L2 46Z'/%3E%3C/svg%3E") center/contain no-repeat; }
 
 /* Hop intro: the letters spring up one after another, then the arrow shoots in from the lower
    left with an overshoot, trailing a lime streak that fades behind it, as if it just sent
@@ -473,7 +461,7 @@ footer .fine a { border-bottom: 1px solid var(--stroke-strong); }
 .no-js .anim-hop .ch, .no-js .anim-hop .go { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .anim-lut .lutw { --x: 57%; } .anim-lut .base { opacity: 1; } .anim-lut .rgb { display: none; } .anim-lut .gbar { opacity: 1; }
+  .anim-lut .lutw { --x: 57%; } .anim-lut .base b { opacity: 1; font-weight: 900; } .anim-lut .gbar, .anim-lut .lime { opacity: 1; }
   .anim-stm .word { opacity: 1; transform: none; } .anim-stm .sl { display: none; } .anim-stm .bars b { transform: none; }
   .anim-hop .ch, .anim-hop .go { opacity: 1; transform: none; } .anim-hop .streak { display: none; }
   .anim-lut *, .anim-lut .lutw, .anim-stm *, .anim-hop * { animation: none !important; }
