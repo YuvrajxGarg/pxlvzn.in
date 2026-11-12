@@ -4,6 +4,7 @@
     stm.pxlvzn.in   apps/stm/
     lut.pxlvzn.in   apps/lut/
     hop.pxlvzn.in   apps/hop/
+    syn.pxlvzn.in   apps/syn/
 
     python3 apps/build.py
 
@@ -20,13 +21,14 @@ import shutil
 
 HERE = pathlib.Path(__file__).resolve().parent
 SHARED = HERE / "_shared"
-ASSET_VERSION = "5"  # bump to make browsers refetch style.css and main.js
+ASSET_VERSION = "6"  # bump to make browsers refetch style.css and main.js
 
 GLYPHS = {
     "stems": '<i class="g g-stems" aria-hidden="true"></i>',
     "strike": "",
     "cube": "",
     "hop": "",
+    "sync": "",
 }
 
 ICONS = """<svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -180,7 +182,7 @@ PAGE = """<!doctype html>
         </div>
         <div class="pxl-note">
           <span class="pm">pxl<i></i></span>
-          <p>{name} is part of <a href="https://pxlvzn.in">PXL</a>, the free app that installs, opens and updates every PXLVZN app, including <a href="https://dwn.pxlvzn.in">Dwn</a>, <a href="https://tag.pxlvzn.in">Tag</a>, Stm, Lut and Hop. Already have PXL? {name} shows up in its app list once it is released.</p>
+          <p>{name} is part of <a href="https://pxlvzn.in">PXL</a>, the free app that installs, opens and updates every PXLVZN app, including <a href="https://dwn.pxlvzn.in">Dwn</a>, <a href="https://tag.pxlvzn.in">Tag</a>, Stm, Lut, Hop and Syn. Already have PXL? {name} shows up in its app list once it is released.</p>
         </div>
         <p class="meta" style="margin-top:26px"><a href="https://github.com/YuvrajxGarg/{id}/releases" data-notes>Release notes</a> · <a href="https://github.com/YuvrajxGarg/{id}">Source code</a></p>
       </div>
@@ -327,6 +329,61 @@ HOP_DEMO = """          <div class="bar"><i></i><i></i><i></i><span>Hop</span><s
             <div class="transfer"><div><b>Day 2 selects/</b> <small>· 14 files · 6.8 GB · 112 MB/s</small></div><span class="code6" aria-label="Pairing code 482 913"><span>4</span><span>8</span><span>2</span><span>9</span><span>1</span><span>3</span></span><div class="meter"><i></i></div></div>
           </div>"""
 
+# ------------------------------------------------------------------------- Syn
+# A multicam timeline: eight tracks arrive out of step, Syn lines them up on the clap (the lime
+# line), and each clip gets its confidence score. The rest of a 20-track shoot is folded into one
+# row, the way the app groups tracks so a big shoot still fits on screen.
+SYN_TRACKS = [
+    # name, source, kind, left %, width %, start offset %, confidence
+    ("A cam", "FX3 · A001.mov", "v", 4, 90, 9, 99),
+    ("B cam", "A7S III · C0042.mp4", "v", 10, 84, -8, 98),
+    ("C cam", "GoPro · GX010118.mp4", "v", 0, 96, 6, 94),
+    ("Drone", "Mini 4 · DJI_0187.mp4", "v", 22, 52, -13, 87),
+    ("Recorder", "Zoom F6 · mix.wav", "a", 2, 97, -5, 99),
+    ("Lav, host", "Tr1.wav", "a", 6, 88, 10, 97),
+    ("Lav, guest", "Tr2.wav", "a", 6, 88, 13, 96),
+    ("Phone", "BTS · IMG_4410.mov", "v", 30, 40, -16, 71),
+]
+SYNC_AT = 38  # where the clap lands once everything is lined up, in % of the timeline
+
+
+def syn_wave(seed, spike, n):
+    # Bars for one clip, with the clap as a tall spike at `spike` (0..1 across the clip).
+    out, x, at, env = [], seed, round(spike * (n - 1)), 55
+    for i in range(n):
+        x = (x * 1103515245 + 12345) & 0x7FFFFFFF
+        env = min(85, max(28, env + (x % 25) - 12))  # a slowly wandering loudness
+        h = 100 if i == at else 80 if abs(i - at) == 1 else round(env * (0.45 + (x >> 8) % 56 / 100))
+        out.append(f'<i style="--h:{h}"{" class=k" if abs(i - at) <= 1 else ""}></i>')
+    return "".join(out)
+
+
+def syn_lane(i, t):
+    name, src, kind, left, width, off, conf = t
+    level = "hi" if conf >= 90 else "mid" if conf >= 80 else "lo"
+    label = "Check" if conf < 80 else f"{conf}%"
+    return (f'              <div class="trk {kind}" style="--i:{i}">'
+            f'<div class="th"><b>{name}</b><small>{src}</small></div>'
+            f'<div class="lanebg"><div class="clip" style="left:{left}%;width:{width}%;--off:{off * 100 / width:.1f}%">'
+            f'<div class="cw">{syn_wave(17 + i * 13, (SYNC_AT - left) / width, round(width * 0.9))}</div></div></div>'
+            f'<span class="conf {level}" title="Sync confidence">{label}</span></div>')
+
+
+SYN_DEMO = (f"""          <div class="bar"><i></i><i></i><i></i><span>Syn</span><span class="r">Interview_Day2.xml · 20 tracks</span></div>
+          <div class="body syn-tl">
+            <div class="status"><span class="spin" aria-hidden="true"></span>
+              <span class="s1">Listening to 20 tracks…</span><span class="s2"><b>19 synced</b> · 1 to check · 95% average confidence</span>
+              <span class="go btn btn-primary btn-sm">Send to Premiere</span></div>
+            <div class="ruler"><span>00:00</span><span>00:30</span><span>01:00</span><span>01:30</span><span>02:00</span></div>
+            <div class="tracks" style="--sync:{SYNC_AT / 100}">
+              <i class="syncline" aria-hidden="true"></i>
+"""
+    + "\n".join(syn_lane(i, t) for i, t in enumerate(SYN_TRACKS))
+    + """
+              <div class="trk more"><div class="th"><b>+12 tracks</b><small>4 cameras · 8 audio</small></div><div class="lanebg"><div class="stack"><i></i><i></i><i></i></div></div><span class="conf hi">96%</span></div>
+            </div>
+          </div>""")
+
 APPS = [
     dict(
         id="tag", name="Tag", glyph="strike",
@@ -448,6 +505,39 @@ APPS = [
         mac_req="Apple silicon",
         fine="Hop works between devices on the same local network.",
     ),
+    dict(
+        id="syn", name="Syn", glyph="sync",
+        tagline="Sync every camera and mic by sound.",
+        tagline_html='<span class="t-thin">Sync every camera and mic</span> <span class="t-bold">by sound, in one go.</span>',
+        description="Syn is a free app for Mac and Windows that syncs multicam footage and separate audio by sound. Send a sequence from Premiere Pro or drop in an XML, and get back a synced timeline with a confidence score on every clip.",
+        og="Multicam and dual-system audio, synced by sound, with a confidence score on every clip. Premiere Pro panel included. Free for Mac and Windows.",
+        lede="Four cameras, two lavs, a recorder and a phone? Send the sequence from Premiere or drop in its XML. Syn lines every clip up by its audio, tells you how sure it is about each one, and hands back a synced timeline, on your own computer.",
+        os_line="macOS and Windows, with a Premiere Pro panel",
+        demo=SYN_DEMO, demo_label="A multicam timeline with eight tracks out of step. Syn lines them up on the clap and gives each clip a confidence score, from 99% down to one phone clip flagged to check. Twelve more tracks are folded into one row.",
+        caption="Twenty tracks in. One synced timeline out, every clip scored.",
+        features_title='Every clip lined up. <span class="thin">Every one scored.</span>',
+        features_lede="No slate, no matching timecode, no nudging waveforms by eye. Syn listens to the audio and does the lining up.",
+        cards=[
+            card("span-3 wide", "music", "Synced by sound", "Syn finds the same moments in every clip&rsquo;s audio, a clap, a word, a door, and lines the clips up to the frame. Cameras that stopped and started get every take placed.", '<div class="chips" aria-label="Syncs"><span class="chip on">Cameras</span><span class="chip on">Lavs</span><span class="chip on">Recorders</span><span class="chip on">Phones</span><span class="chip">Drones</span><span class="chip">GoPros</span></div>', lime=True),
+            card("span-3 wide", "check", "A confidence score on every clip", "Each clip gets a score for how sure Syn is of its sync. Anything low is flagged, so you check one clip instead of the whole timeline.", '<div class="confs" aria-label="Example scores"><span class="conf hi">99%</span><span class="conf hi">96%</span><span class="conf mid">87%</span><span class="conf lo">Check</span></div>'),
+            card("span-2", "layers", "Built for big shoots", "Twenty cameras and mics, or sixty. Tracks group by camera and device and fold away once synced, so the timeline stays readable."),
+            card("span-2", "bolt", "A Premiere Pro panel", "Send the open sequence to Syn and get the synced one back, from a panel inside Premiere. No exporting XMLs by hand."),
+            card("span-2", "file", "Originals untouched", "Syn writes a new XML and a new sequence. Your media is read, never moved, renamed or re-encoded."),
+        ],
+        how_title='Send it. <span class="thin">Syn lines it up.</span>',
+        how_lede="Use the panel in Premiere, or drag XMLs in and out if you prefer.",
+        steps=[step("Send the sequence", "Click Send in the Syn panel in Premiere, or drop an exported XML onto Syn."),
+               step("Syn listens", "It analyses every track&rsquo;s audio on your computer and lines the clips up, with live progress on each one."),
+               step("Back to the edit", "Check anything flagged, then send the synced sequence back to Premiere or save it as an XML.")],
+        private_lede="Syn never uploads your footage. Audio is analysed on your own computer, so client work and unreleased shoots stay where they are.",
+        servers_line="Audio is analysed on your machine. Your footage never leaves it.",
+        mac_req="Apple silicon",
+        mac_url="https://github.com/YuvrajxGarg/syn/releases/latest/download/Syn.dmg",
+        win_url="https://github.com/YuvrajxGarg/syn/releases/latest/download/Syn-Setup.exe",
+        mac_note="Open it and drag <b>Syn</b> to Applications. The first time, right-click it and choose <b>Open</b>.",
+        win_note="Run the setup. It adds Syn to the Start menu. If SmartScreen appears, click <b>More info</b>, then <b>Run anyway</b>.",
+        fine="Syn reads and writes Premiere Pro XML. The timeline above is drawn in HTML, not a screenshot.",
+    ),
 ]
 
 
@@ -457,7 +547,8 @@ LUT_MARK = ('<span class="lutw"><span class="base">lut</span><span class="lime" 
             '<i class="gbar" aria-hidden="true"></i></span>')
 HOP_MARK = '<span class="hopw">hop<i class="go" aria-hidden="true"></i></span>'
 TAG_MARK = '<span class="tagw">tag<i class="strike" aria-hidden="true"></i></span>'
-MARKS = {"tag": TAG_MARK, "lut": LUT_MARK, "hop": HOP_MARK}
+SYN_MARK = '<span class="synw">syn<i class="link" aria-hidden="true"><b></b><i></i><b></b></i></span>'
+MARKS = {"tag": TAG_MARK, "lut": LUT_MARK, "hop": HOP_MARK, "syn": SYN_MARK}
 
 HERO_MARKS = {
     "tag": ('<div class="hero-mark wordmark anim-tag" aria-hidden="true"><span class="tagw">'
@@ -472,6 +563,9 @@ HERO_MARKS = {
     "hop": ('<div class="hero-mark wordmark anim-hop" aria-hidden="true"><span class="hopw">'
             '<span class="ch">h</span><span class="ch">o</span><span class="ch">p</span>'
             '<i class="go"><i class="streak"></i></i></span></div>'),
+    "syn": ('<div class="hero-mark wordmark anim-syn" aria-hidden="true"><span class="synw">'
+            '<span class="ch">s</span><span class="ch">y</span><span class="ch">n</span>'
+            '<i class="link"><b></b><i></i><b></b></i></span></div>'),
 }
 
 

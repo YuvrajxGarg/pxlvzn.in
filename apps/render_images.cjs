@@ -16,6 +16,7 @@ const APPS = {
   stm: { glyph: '<i class="g g-stems"></i>', tagline: "Split any song into its stems." },
   lut: { mark: '<span class="lutw" style="--knock:#1f1f21"><span class="base">lut</span><span class="lime">lut</span><i class="gbar"></i></span>', tagline: "Match the colour of one shot to another." },
   hop: { mark: '<span class="hopw">hop<i class="go"></i></span>', tagline: "Send files between your devices. No cloud." },
+  syn: { mark: '<span class="synw">syn<i class="link"><b></b><i></i><b></b></i></span>', tagline: "Sync every camera and mic by sound." },
 };
 
 const page = (body, w, h) => `<!doctype html><html><head><style>${CSS}
@@ -38,6 +39,7 @@ const page = (body, w, h) => `<!doctype html><html><head><style>${CSS}
   const ctx = await browser.newContext({ deviceScaleFactor: 1 });
   const p = await ctx.newPage();
   for (const [id, a] of Object.entries(APPS)) {
+    if (process.argv[2] && !process.argv.slice(2).includes(id)) continue;
     const dir = path.join(HERE, id, "assets");
     const mark = (px) => `<span class="wordmark" style="font-size:${px}px">${a.mark || id + a.glyph}</span>`;
 
