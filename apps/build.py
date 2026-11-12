@@ -21,7 +21,7 @@ import shutil
 
 HERE = pathlib.Path(__file__).resolve().parent
 SHARED = HERE / "_shared"
-ASSET_VERSION = "6"  # bump to make browsers refetch style.css and main.js
+ASSET_VERSION = "7"  # bump to make browsers refetch style.css and main.js
 
 GLYPHS = {
     "stems": '<i class="g g-stems" aria-hidden="true"></i>',
