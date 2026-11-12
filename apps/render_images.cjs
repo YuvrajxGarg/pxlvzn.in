@@ -1,0 +1,57 @@
+// Renders each app site's icon.png, apple-touch-icon.png and og.png (the link preview)
+// from HTML, with the same wordmark and glyph the sites use. Run after build.py:
+//
+//     node apps/render_images.cjs        (needs Playwright and the Inter font)
+//
+// The app repos may ship their own icons later; drop a 512px icon.png into
+// apps/<id>/assets/ to replace the rendered one.
+const { chromium } = require("playwright");
+const fs = require("fs");
+const path = require("path");
+
+const HERE = __dirname;
+const CSS = fs.readFileSync(path.join(HERE, "_shared", "style.css"), "utf8");
+const APPS = {
+  stm: { glyph: '<i class="g g-stems"><b></b><b></b><b></b><b></b></i>', tagline: "Split any song into its stems." },
+  lut: { glyph: '<i class="g g-cube"></i>', tagline: "Match the colour of one shot to another." },
+  hop: { glyph: '<i class="g g-hop"></i>', tagline: "Send files between your devices. No cloud." },
+};
+
+const page = (body, w, h) => `<!doctype html><html><head><style>${CSS}
+  :root { --display: "Inter", system-ui, sans-serif; --font: "Inter", system-ui, sans-serif; }
+  html, body { margin: 0; width: ${w}px; height: ${h}px; overflow: hidden; }
+  body { background: transparent; display: grid; place-items: center; }
+  .tile { width: 82%; height: 82%; border-radius: 22.5%; display: grid; place-items: center;
+    background: linear-gradient(#2b2b2d, #121213); border: 2px solid rgba(255,255,255,.12);
+    box-shadow: inset 0 2px 0 rgba(255,255,255,.06); }
+  .tile.full { width: 100%; height: 100%; border-radius: 0; border: 0; }
+  .og { width: 100%; height: 100%; background: radial-gradient(700px 380px at 50% 18%, rgba(204,255,77,.14), transparent 70%), #0b0b0c;
+    display: grid; place-content: center; justify-items: center; gap: 34px; text-align: center; }
+  .og h1 { max-width: 20ch; font-size: 64px; }
+  .og small { font: 600 22px/1 var(--font); color: rgba(255,255,255,.45); letter-spacing: .02em; }
+  .wordmark { color: #fff; }
+</style></head><body>${body}</body></html>`;
+
+(async () => {
+  const browser = await chromium.launch();
+  const ctx = await browser.newContext({ deviceScaleFactor: 1 });
+  const p = await ctx.newPage();
+  for (const [id, a] of Object.entries(APPS)) {
+    const dir = path.join(HERE, id, "assets");
+    const mark = (px) => `<span class="wordmark" style="font-size:${px}px">${id}${a.glyph}</span>`;
+
+    await p.setViewportSize({ width: 512, height: 512 });
+    await p.setContent(page(`<div class="tile">${mark(150)}</div>`, 512, 512));
+    await p.screenshot({ path: path.join(dir, "icon.png"), omitBackground: true });
+
+    await p.setViewportSize({ width: 180, height: 180 });
+    await p.setContent(page(`<div class="tile full">${mark(56)}</div>`, 180, 180));
+    await p.screenshot({ path: path.join(dir, "apple-touch-icon.png") });
+
+    await p.setViewportSize({ width: 1200, height: 630 });
+    await p.setContent(page(`<div class="og">${mark(150)}<h1>${a.tagline}</h1><small>${id}.pxlvzn.in · Free for Mac and Windows</small></div>`, 1200, 630));
+    await p.screenshot({ path: path.join(dir, "og.png") });
+    console.log("rendered", id);
+  }
+  await browser.close();
+})();
