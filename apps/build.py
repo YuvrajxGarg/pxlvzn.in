@@ -6,6 +6,7 @@
     hop.pxlvzn.in   apps/hop/
     syn.pxlvzn.in   apps/syn/
     pin.pxlvzn.in   apps/pin/
+    dsk.pxlvzn.in   apps/dsk/
 
     python3 apps/build.py
 
@@ -31,6 +32,7 @@ GLYPHS = {
     "hop": "",
     "sync": "",
     "pin": "",
+    "dots": "",
 }
 
 ICONS = """<svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -417,6 +419,26 @@ PIN_DEMO = ('''          <div class="bar"><i></i><i></i><i></i><span>Pin</span><
             <div class="pclock"><b>9:41</b><small>Thursday 12 November</small></div>
           </div>''')
 
+# ------------------------------------------------------------------------- Dsk
+# The app's own card: a glowing dot-matrix bar by category (main.js draws it on the canvas).
+DSK_CATS = [("Apps", "#3d8bff", "52.6 GB"), ("Developer", "#2fd36b", "36.3 GB"), ("Photos", "#ff4fa3", "58.5 GB"),
+            ("Movies", "#a46bff", "43.1 GB"), ("Documents", "#22d3ee", "39.5 GB"), ("Music", "#facc15", "12.0 GB"),
+            ("System data", "#a1a1aa", "29.8 GB"), ("Caches", "#ff8a3d", "42.1 GB"), ("Trash", "#ff5b5b", "0.0 GB")]
+DSK_DEMO = ("""          <div class="bar"><i></i><i></i><i></i><span>Dsk</span><span class="r">Macintosh HD · 512 GB</span></div>
+          <div class="body dsk-card">
+            <div class="dsk-head"><b>313.9 GB</b><span>of 512 GB used</span></div>
+            <div class="dsk-status"><b>Calculating</b><code>~/Library/Caches/com.penrose.studio</code></div>
+            <div class="dsk-bar"><canvas data-sizes="52.6,36.3,58.5,43.1,39.5,12.0,29.8,42.1,0" data-total="512"
+              data-names="Apps,Developer,Photos,Movies,Documents,Music,System data,Caches,Trash"
+              data-colors="#3d8bff,#2fd36b,#ff4fa3,#a46bff,#22d3ee,#facc15,#a1a1aa,#ff8a3d,#ff5b5b"></canvas><div class="dsk-tip"></div></div>
+            <div class="dsk-cats">
+""" + "\n".join('              <div class="dsk-cat" style="--c:%s"><i></i><span>%s</span><em>%s</em></div>' % (c, l, v)
+                for l, c, v in DSK_CATS) + """
+            </div>
+            <div class="dsk-foot"><span class="spark"></span><span>You can clear <b>44.2 GB</b> safely, and up to 16.6 GB more after a look.</span><span class="btn-mini">Clear 44.2 GB</span></div>
+          </div>""")
+
+
 APPS = [
     dict(
         id="tag", name="Tag", glyph="strike",
@@ -604,6 +626,39 @@ APPS = [
         win_note="Run the setup. It adds Pin to the Start menu. If SmartScreen appears, click <b>More info</b>, then <b>Run anyway</b>.",
         fine="Pin is not affiliated with Pinterest. The wall above is drawn in HTML, not real pins.",
     ),
+    dict(
+        id="dsk", name="Dsk", glyph="dots",
+        tagline="See what's filling your disk. Clear what's safe.",
+        tagline_html='<span class="t-thin">See what&rsquo;s filling your disk.</span> <span class="t-bold">Clear what&rsquo;s safe.</span>',
+        description="Dsk is a free disk cleanup app for Mac and Windows. A live bar shows what's using your space, Dsk ticks only what's safe to clear (caches, logs, build files), and everything goes to the Trash first. Ask Claude for a second opinion.",
+        og="A live bar of what's filling your disk, one click to clear what's safe, and the Trash first, always. Free for Mac and Windows.",
+        lede="Your disk as a live bar: apps, code and toolchains, photos, movies, documents, music, system data, caches and the Trash. Dsk ticks only what rebuilds itself, flags what to look at first, and sends everything to the Trash so you can change your mind.",
+        os_line="macOS and Windows",
+        demo=DSK_DEMO, demo_label="Dsk showing 313.9 GB of 512 GB used as a glowing dot-matrix bar split into Apps, Developer, Photos, Movies, Documents, Music, System data, Caches and Trash, with 44.2 GB safe to clear.",
+        caption="Rest on a part of the bar to see what&rsquo;s in it.",
+        features_title='Clear the junk. <span class="thin">Keep what matters.</span>',
+        features_lede="Dsk knows what rebuilds itself and what doesn&rsquo;t, and it never ticks your own files for you.",
+        cards=[
+            card("span-3 wide", "check", "Three honest groups", "<b>Safe to clear</b>: caches, logs, build files, package caches. <b>Look first</b>: old installers, stale node_modules, big files you haven&rsquo;t opened in months. <b>Leave alone</b>: your Photos library, iCloud, the system.", '<div class="chips" aria-label="Clears"><span class="chip on">App caches</span><span class="chip on">Xcode</span><span class="chip on">npm · pip · cargo</span><span class="chip on">Browser caches</span><span class="chip">Old installers</span><span class="chip">node_modules</span></div>', lime=True),
+            card("span-3 wide", "eye", "Ask Claude", "Claude reviews every item and says what&rsquo;s safe, with a one-line reason, or explains a folder you don&rsquo;t recognise. It only sees paths, sizes and dates, never your files, and uses your own API key."),
+            card("span-2", "layers", "Trash first, always", "Everything Dsk removes goes to the Trash or Recycle Bin, so you can put it back. Your home, Documents and Library folders can never be removed whole."),
+            card("span-2", "bolt", "Seconds with WizTree", "On Windows, Dsk uses WizTree when it&rsquo;s installed to read the whole drive in seconds. On a Mac it measures your folders on several threads."),
+            card("span-2", "term", "And a CLI", "Clear caches from a script or a cron job.", '<div class="term"><span class="p">$</span> Dsk clean</div>'),
+        ],
+        how_title='Look, tick, clear. <span class="thin">Done.</span>',
+        how_lede="Dsk starts measuring the moment it opens. There&rsquo;s nothing to set up.",
+        steps=[step("See the bar", "Dsk measures your disk and fills the bar by category as it goes."),
+               step("Check the list", "Safe things are ticked for you. Everything else waits for your say, with Claude&rsquo;s view if you want it."),
+               step("Move to Trash", "One button. Empty the Trash when you&rsquo;re happy, and the space is yours.")],
+        private_lede="Dsk has no servers. It measures and cleans on your own computer. If you ask Claude, only the list of paths, sizes and dates is sent, with your own key.",
+        servers_line="Your disk is measured on your machine. Your files never leave it.",
+        mac_req="macOS 11 or later · Apple silicon",
+        mac_url="https://github.com/YuvrajxGarg/dsk/releases/latest/download/Dsk.dmg",
+        win_url="https://github.com/YuvrajxGarg/dsk/releases/latest/download/Dsk-Setup.exe",
+        mac_note="Open it and drag <b>Dsk</b> to Applications. The first time, right-click it and choose <b>Open</b>.",
+        win_note="Run the setup. It adds Dsk to the Start menu. If SmartScreen appears, click <b>More info</b>, then <b>Run anyway</b>.",
+        fine="The bar above is drawn live in your browser with example numbers.",
+    ),
 ]
 
 
@@ -620,7 +675,9 @@ SYN_MARK = '<img class="synmark" src="/assets/mark.svg" alt="" width="62" height
 # screensaver's masonry wall in miniature), "n". Matches the app's .mark.
 PIN_I = '<span class="mi"><span class="c"><b></b><b></b><b></b></span><span class="c"><b></b><b></b><b></b></span><span class="c"><b></b><b></b></span></span>'
 PIN_MARK = '<span class="pinw">p' + PIN_I + 'n</span>'
-MARKS = {"tag": TAG_MARK, "lut": LUT_MARK, "hop": HOP_MARK, "syn": SYN_MARK, "pin": PIN_MARK}
+DSK_DOTS = '<span class="dots" aria-hidden="true">' + "<i></i>" * 7 + "</span>"
+DSK_MARK = '<span class="dskw">dsk' + DSK_DOTS + "</span>"
+MARKS = {"dsk": DSK_MARK, "tag": TAG_MARK, "lut": LUT_MARK, "hop": HOP_MARK, "syn": SYN_MARK, "pin": PIN_MARK}
 
 HERO_MARKS = {
     "tag": ('<div class="hero-mark wordmark anim-tag" aria-hidden="true"><span class="tagw">'
@@ -639,6 +696,8 @@ HERO_MARKS = {
             '<span class="ch">s</span><span class="ch">y</span><span class="ch">n</span>'
             '<i class="link"><b></b><i></i><b></b></i><i class="bl"></i></span>'
             '<img class="rest" src="/assets/mark.svg" alt=""></div>'),
+    "dsk": ('<div class="hero-mark wordmark anim-dsk" aria-hidden="true"><span class="dskw">'
+            '<span class="ch">d</span><span class="ch">s</span><span class="ch">k</span>' + DSK_DOTS + '</span></div>'),
     "pin": ('<div class="hero-mark wordmark anim-pin" aria-hidden="true"><span class="pinw">'
             '<span class="ch">p</span>' + PIN_I + '<span class="ch">n</span></span></div>'),
 }
