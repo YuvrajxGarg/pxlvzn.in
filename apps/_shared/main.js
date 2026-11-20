@@ -123,6 +123,94 @@
     addEventListener("resize", place);
   }
 
+  // ---------------------------------------------------------------- dot-matrix bar (Dsk)
+  // The same bar as the app: segments of glowing cells, brighter toward each segment's end,
+  // twinkling. Rest on a segment to light it up. Fills in like a scan on first sight.
+  const dsk = $(".dsk-bar canvas");
+  if (dsk) {
+    const sizes = dsk.dataset.sizes.split(",").map(Number), total = +dsk.dataset.total;
+    const colors = dsk.dataset.colors.split(","), names = dsk.dataset.names.split(",");
+    const tip = $(".dsk-tip"), cats = $(".dsk-cats");
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const PITCH = 8, CELL = 5.5, PAD = 18;
+    let w, h, dpr, cols, rows, ox, oy, seeds, hot = -1, t0 = performance.now(), fill = still ? 1 : 0;
+    const size = () => {
+      const r = dsk.getBoundingClientRect();
+      dpr = devicePixelRatio || 1; w = r.width; h = r.height;
+      dsk.width = Math.round(w * dpr); dsk.height = Math.round(h * dpr);
+      cols = Math.floor((w - PAD * 2 + PITCH - CELL) / PITCH); rows = Math.floor((h - PAD * 2 + PITCH - CELL) / PITCH);
+      ox = PAD + (w - PAD * 2 - (cols * PITCH - (PITCH - CELL))) / 2; oy = PAD + (h - PAD * 2 - (rows * PITCH - (PITCH - CELL))) / 2;
+      seeds = new Float32Array(cols * rows * 2).map(() => Math.random());
+    };
+    const spans = () => {
+      let acc = 0; const out = [];
+      sizes.forEach((v, i) => {
+        const a = Math.round(acc / total * cols * fill), b = Math.round((acc + v) / total * cols * fill);
+        acc += v;
+        if (b > a) out.push({ i, c0: a, c1: b });
+      });
+      return out;
+    };
+    const hexA = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`; };
+    let started = false;
+    const draw = (now) => {
+      if (started && fill < 1) fill = Math.min(1, fill + 0.012);
+      const ctx = dsk.getContext("2d"), t = (now - t0) / 1000;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+      const S = spans(), end = S.length ? S[S.length - 1].c1 : 0;
+      ctx.fillStyle = "rgba(255,255,255,.055)";
+      for (let c = end; c < cols; c++) for (let r = 0; r < rows; r++) ctx.fillRect(ox + c * PITCH, oy + r * PITCH, CELL, CELL);
+      S.forEach((s, k) => {
+        const col = colors[s.i], dim = hot >= 0 && hot !== s.i, width = s.c1 - s.c0;
+        for (let c = s.c0; c < s.c1; c++) {
+          const edge = (c - s.c0 + 1) / width;
+          for (let r = 0; r < rows; r++) {
+            const j = (c * rows + r) * 2, a = seeds[j], b = seeds[j + 1];
+            const lit = a > 0.86 - edge * 0.22 - (hot === s.i ? 0.12 : 0) || Math.sin(t * (0.6 + b * 1.6) + a * 6.283) > 0.985 - edge * 0.05;
+            let alpha = lit ? 0.95 : 0.22 + 0.16 * edge * b;
+            if (dim) alpha *= 0.28;
+            const white = lit && b > 0.7 && !dim;
+            ctx.fillStyle = white ? "#fff" : col; ctx.globalAlpha = white ? 0.85 : alpha;
+            ctx.fillRect(ox + c * PITCH, oy + r * PITCH, CELL, CELL);
+          }
+        }
+        ctx.globalAlpha = 1;
+        const x0 = ox + s.c0 * PITCH - 2.5, x1 = ox + s.c1 * PITCH - (PITCH - CELL) + 2.5, y0 = oy - 2.5, y1 = oy + rows * PITCH - (PITCH - CELL) + 2.5;
+        ctx.save(); ctx.strokeStyle = hexA(col, dim ? 0.3 : 0.95); ctx.lineWidth = 2; ctx.shadowColor = col; ctx.shadowBlur = dim ? 0 : hot === s.i ? 22 : 12;
+        ctx.beginPath();
+        const rr = [k === 0 ? 12 : 3, k === S.length - 1 ? 12 : 3, k === S.length - 1 ? 12 : 3, k === 0 ? 12 : 3];
+        ctx.roundRect ? ctx.roundRect(x0, y0, x1 - x0, y1 - y0, rr) : ctx.rect(x0, y0, x1 - x0, y1 - y0);
+        ctx.stroke(); ctx.restore();
+      });
+      if (!still) requestAnimationFrame(draw);
+    };
+    const setHot = (i, x) => {
+      hot = i;
+      tip.classList.toggle("on", i >= 0);
+      if (i >= 0) { tip.innerHTML = `<b>${names[i]}</b>${$$(".dsk-cat em")[i].textContent}`; tip.style.left = Math.max(40, Math.min(w - 2 * PAD - 40, x)) + "px"; }
+      cats.classList.toggle("hovering", i >= 0);
+      $$(".dsk-cat").forEach((el, k) => el.classList.toggle("hot", k === i));
+      if (still) requestAnimationFrame(draw);
+    };
+    dsk.addEventListener("pointermove", (e) => {
+      const r = dsk.getBoundingClientRect(), x = e.clientX - r.left, c = Math.floor((x - ox) / PITCH);
+      const s = spans().find((sp) => c >= sp.c0 && c < sp.c1);
+      setHot(s ? s.i : -1, x - PAD);
+    });
+    dsk.addEventListener("pointerleave", () => setHot(-1));
+    $$(".dsk-cat").forEach((el, i) => {
+      el.addEventListener("pointerenter", () => { const s = spans().find((sp) => sp.i === i); setHot(s ? i : -1, s ? ox + (s.c0 + s.c1) / 2 * PITCH - PAD : 0); });
+      el.addEventListener("pointerleave", () => setHot(-1));
+    });
+    size();
+    addEventListener("resize", () => { size(); if (still) requestAnimationFrame(draw); });
+    if ("IntersectionObserver" in window && !still) {
+      const io = new IntersectionObserver((en) => { if (en[0].isIntersecting) { started = true; io.disconnect(); } }, { threshold: 0.3 });
+      io.observe(dsk);
+    } else started = true;
+    requestAnimationFrame(draw);
+  }
+
   // ---------------------------------------------------------------- reveals
   const items = $$(".reveal");
   if ("IntersectionObserver" in window) {
