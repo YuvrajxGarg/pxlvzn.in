@@ -68,6 +68,7 @@
         return href;
       };
       const macHref = wire("mac", mac), winHref = wire("windows", win);
+      if ($('[data-dl="android"]')) wire("android", pick(/android.*\.apk$/i) || pick(/\.apk$/i));
       const name = document.title.split(" ")[0];
       const note = (key, html) => $$(`[data-note="${key}"]`).forEach((el) => (el.innerHTML = html));
       if (mac && /\.dmg$/i.test(mac.name)) note("mac", `Open it and drag <b>${name}</b> to Applications. The first time, right-click it and choose <b>Open</b>.`);
