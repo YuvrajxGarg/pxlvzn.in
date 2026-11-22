@@ -18,6 +18,7 @@ const APPS = {
   hop: { mark: '<span class="hopw">hop<i class="go"></i></span>', tagline: "Send files between your devices. No cloud." },
   // Syn uses the outlined brand mark (apps/_shared/syn/mark.svg) rather than live text.
   dsk: { mark: '<span class="dskw">dsk<span class="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></span>', tagline: "See what's filling your disk. Clear what's safe." },
+  kvm: { mark: '<span class="kvmw">kvm<span class="twin"><i class="a"></i><i class="dot"></i><i class="b"></i></span></span>', tagline: "One keyboard and mouse for your Mac and PC." },
   pin: { mark: '<span class="pinw">p<span class="mi"><span class="c"><b></b><b></b><b></b></span><span class="c"><b></b><b></b><b></b></span><span class="c"><b></b><b></b></span></span>n</span>', tagline: "Your Pinterest feed, as a screensaver." },
   syn: { mark: `<img class="synmark" src="data:image/svg+xml;base64,${fs.readFileSync(path.join(__dirname, "_shared", "syn", "mark.svg")).toString("base64")}">`, tagline: "Sync every camera and mic by sound." },
 };
