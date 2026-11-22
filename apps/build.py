@@ -7,6 +7,7 @@
     syn.pxlvzn.in   apps/syn/
     pin.pxlvzn.in   apps/pin/
     dsk.pxlvzn.in   apps/dsk/
+    kvm.pxlvzn.in   apps/kvm/
 
     python3 apps/build.py
 
@@ -33,6 +34,7 @@ GLYPHS = {
     "sync": "",
     "pin": "",
     "dots": "",
+    "twin": "",
 }
 
 ICONS = """<svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -439,6 +441,36 @@ DSK_DEMO = ("""          <div class="bar"><i></i><i></i><i></i><span>Dsk</span><
           </div>""")
 
 
+# ------------------------------------------------------------------------- Kvm
+# A desk: the MacBook on the left, the PC's monitor on the right. The pointer slides off the
+# Mac's right edge onto the PC, clicks a text box, and the Mac's keyboard types into it. On the
+# second half of the loop a UAC prompt appears and the same pointer clicks Yes.
+KVM_POINTER = ('<svg class="kp" viewBox="0 0 20 24" aria-hidden="true"><path d="M2 1.5v18.2l4.6-4.3 3 6.9 3.1-1.4-3-6.8 6.3-.3z"'
+               ' fill="#fff" stroke="#0b0b0c" stroke-width="1.4" stroke-linejoin="round"/></svg>')
+KVM_KEYS = "".join('<i class="k%s">%s</i>' % (" w" if k == " " else "", "&nbsp;" if k == " " else k)
+                   for k in "QWERTYUIOP")
+KVM_DEMO = ("""          <div class="bar"><i></i><i></i><i></i><span>Kvm</span><span class="r">MacBook Air + Edit PC · paired</span></div>
+          <div class="body kvm-desk">
+            <div class="kvm-screens">
+              <div class="kscreen mac"><div class="kmenu"><b></b><span>Finder</span><span>File</span><span>Edit</span><em>9:41</em></div>
+                <div class="kwin"><div class="kwbar"><i></i><i></i><i></i></div><div class="kline l1"></div><div class="kline l2"></div><div class="kline l3"></div></div>
+                <div class="kdock"><i></i><i></i><i></i><i></i><i></i></div>
+                <div class="kname">MacBook Air</div><div class="kedge"></div></div>
+              <div class="kscreen pc"><div class="kwin2"><div class="kwbar2"><span>Notepad</span><i></i><i></i><i></i></div>
+                  <div class="ktype"><span class="kt">Typed on the Mac keyboard.</span><span class="kcaret"></span></div></div>
+                <div class="kuac"><b>User Account Control</b><p>Do you want to allow this app to make changes to your device?</p><div class="kbtns"><span class="yes">Yes</span><span>No</span></div></div>
+                <div class="ktask"><i></i><i></i><i></i><i></i><em>9:41</em></div>
+                <div class="kname">Edit PC</div></div>
+              <div class="kptr">""" + KVM_POINTER + """</div>
+            </div>
+            <div class="kvm-foot">
+              <div class="kstate"><span class="dot"></span><b class="s1">On this Mac</b><b class="s2">Keyboard and mouse on Edit PC</b></div>
+              <div class="kkeys" aria-hidden="true">""" + KVM_KEYS + """</div>
+              <span class="kesc">Ctrl Alt Esc brings it home</span>
+            </div>
+          </div>""")
+
+
 APPS = [
     dict(
         id="tag", name="Tag", glyph="strike",
@@ -659,6 +691,39 @@ APPS = [
         win_note="Run the setup. It adds Dsk to the Start menu. If SmartScreen appears, click <b>More info</b>, then <b>Run anyway</b>.",
         fine="The bar above is drawn live in your browser with example numbers.",
     ),
+    dict(
+        id="kvm", name="Kvm", glyph="twin",
+        tagline="One keyboard and mouse for your Mac and PC.",
+        tagline_html='<span class="t-thin">One keyboard and mouse</span> <span class="t-bold">for your Mac and PC.</span>',
+        description="Kvm is a free app for Mac and Windows that shares one keyboard and mouse between your computers. Push the pointer off the edge of one screen and it carries on onto the other, keyboard and all, even on admin prompts and the Windows sign-in screen. Shared clipboard and file sending too.",
+        og="Push the pointer off your Mac's screen and keep working on your PC, keyboard and all, even on admin prompts and the sign-in screen. Free for Mac and Windows.",
+        lede="Put your Mac and your PC side by side, push the pointer off the edge, and it carries on onto the other screen. The keyboard always goes with it, whatever you're pointing with. Copy on one, paste on the other, and drop files across. No account, no cloud.",
+        os_line="macOS and Windows",
+        demo=KVM_DEMO, demo_label="A MacBook screen and a PC monitor side by side. The pointer slides off the Mac's right edge onto the PC, clicks into Notepad and the Mac's keyboard types into it, then clicks Yes on a Windows admin prompt.",
+        caption="The keyboard goes wherever the pointer goes. Even onto admin prompts.",
+        features_title='Two computers. <span class="thin">One desk.</span>',
+        features_lede="Kvm makes your Mac and your PC feel like one computer with two screens.",
+        cards=[
+            card("span-3 wide", "bolt", "Push past the edge", "Arrange your computers in Kvm the way they sit on your desk, then push the pointer past that edge. Every pointing device crosses the same way, and the keyboard always goes with the pointer.", '<div class="chips" aria-label="Works with"><span class="chip on">Trackpad</span><span class="chip on">MX Master</span><span class="chip on">Any mouse</span><span class="chip on">Media keys</span><span class="chip">Cursor lock</span><span class="chip">Hold to cross</span></div>', lime=True),
+            card("span-3 wide", "lock", "Admin prompts and the sign-in screen", "On Windows, the setup installs the Kvm service, so your Mac&rsquo;s keyboard and mouse also work on UAC prompts, the lock screen and the sign-in screen after a restart. Ctrl+Alt+Del works too."),
+            card("span-2", "layers", "One clipboard", "Copy on one computer, paste on the other. Text and pictures, both ways."),
+            card("span-2", "file", "Send files", "Drop files or folders on a computer in the Kvm window and they land in a Kvm folder in its Downloads."),
+            card("span-2", "check", "Shortcuts feel native", "&#8984;C on the Mac is Ctrl+C on the PC. Ring, lock or sleep the other computer from Kvm.", '<div class="term"><span class="p">&#8984;</span> C &rarr; Ctrl C</div>'),
+        ],
+        how_title='Pair once. <span class="thin">Then just push.</span>',
+        how_lede="Open Kvm on both computers, on the same network. That&rsquo;s the only setup.",
+        steps=[step("Open Kvm on both", "They find each other on your network. If yours blocks that, add one by address."),
+               step("Pair with a code", "Click <b>Pair</b> on one computer and type the 6-digit code the other one shows."),
+               step("Put it where it sits", "Drag the other computer to its side of this one. Push the pointer over that edge.")],
+        private_lede="Kvm has no servers and no account. Your computers talk to each other directly on your own network, and every key you press is encrypted with a key only they share. Pairing uses SPAKE2, so nobody on your Wi-Fi can guess the code offline.",
+        servers_line="Your computers talk directly. Your keystrokes never leave your network.",
+        mac_req="macOS 11 or later · Apple silicon",
+        mac_url="https://github.com/YuvrajxGarg/kvm/releases/latest/download/Kvm.dmg",
+        win_url="https://github.com/YuvrajxGarg/kvm/releases/latest/download/Kvm-Setup.exe",
+        mac_note="Open it and drag <b>Kvm</b> to Applications. The first time, right-click it and choose <b>Open</b>, then allow <b>Accessibility</b> and <b>Input Monitoring</b> for Kvm.",
+        win_note="Run the setup and allow admin once: it installs the Kvm service for admin prompts and the sign-in screen. If SmartScreen appears, click <b>More info</b>, then <b>Run anyway</b>.",
+        fine="The desk above is drawn in HTML. Kvm talks only to computers you&rsquo;ve paired, on port 47610.",
+    ),
 ]
 
 
@@ -677,7 +742,9 @@ PIN_I = '<span class="mi"><span class="c"><b></b><b></b><b></b></span><span clas
 PIN_MARK = '<span class="pinw">p' + PIN_I + 'n</span>'
 DSK_DOTS = '<span class="dots" aria-hidden="true">' + "<i></i>" * 7 + "</span>"
 DSK_MARK = '<span class="dskw">dsk' + DSK_DOTS + "</span>"
-MARKS = {"dsk": DSK_MARK, "tag": TAG_MARK, "lut": LUT_MARK, "hop": HOP_MARK, "syn": SYN_MARK, "pin": PIN_MARK}
+KVM_TWIN = '<span class="twin" aria-hidden="true"><i class="a"></i><i class="dot"></i><i class="b"></i></span>'
+KVM_MARK = '<span class="kvmw">kvm' + KVM_TWIN + "</span>"
+MARKS = {"kvm": KVM_MARK, "dsk": DSK_MARK, "tag": TAG_MARK, "lut": LUT_MARK, "hop": HOP_MARK, "syn": SYN_MARK, "pin": PIN_MARK}
 
 HERO_MARKS = {
     "tag": ('<div class="hero-mark wordmark anim-tag" aria-hidden="true"><span class="tagw">'
@@ -698,6 +765,8 @@ HERO_MARKS = {
             '<img class="rest" src="/assets/mark.svg" alt=""></div>'),
     "dsk": ('<div class="hero-mark wordmark anim-dsk" aria-hidden="true"><span class="dskw">'
             '<span class="ch">d</span><span class="ch">s</span><span class="ch">k</span>' + DSK_DOTS + '</span></div>'),
+    "kvm": ('<div class="hero-mark wordmark anim-kvm" aria-hidden="true"><span class="kvmw">'
+            '<span class="ch">k</span><span class="ch">v</span><span class="ch">m</span>' + KVM_TWIN + '</span></div>'),
     "pin": ('<div class="hero-mark wordmark anim-pin" aria-hidden="true"><span class="pinw">'
             '<span class="ch">p</span>' + PIN_I + '<span class="ch">n</span></span></div>'),
 }

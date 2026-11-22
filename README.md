@@ -23,7 +23,7 @@ npm run build    # production build → dist/
 
 The **Apps** section reads [`apps.json`](https://github.com/YuvrajxGarg/pxl/blob/main/apps.json) from the PXL repository, the same file the app reads. Adding an app there updates the site and every copy of PXL at once. The cards in `index.html` are only the fallback for when GitHub can't be reached.
 
-## App sites (tag, stm, lut, hop, syn, pin)
+## App sites (tag, stm, lut, hop, syn, pin, dsk, kvm)
 
 `apps/` holds the websites for the newer apps, one static site per subdomain, in the same design as [dwn.pxlvzn.in](https://dwn.pxlvzn.in):
 
@@ -34,6 +34,8 @@ The **Apps** section reads [`apps.json`](https://github.com/YuvrajxGarg/pxl/blob
 | `apps/hop/` | [hop.pxlvzn.in](https://hop.pxlvzn.in) | `hop-site` |
 | `apps/syn/` | [syn.pxlvzn.in](https://syn.pxlvzn.in) | `syn-site` |
 | `apps/pin/` | [pin.pxlvzn.in](https://pin.pxlvzn.in) | `pin-site` |
+| `apps/dsk/` | [dsk.pxlvzn.in](https://dsk.pxlvzn.in) | `dsk-site` |
+| `apps/kvm/` | [kvm.pxlvzn.in](https://kvm.pxlvzn.in) | `kvm-site` |
 
 Each folder is a Vercel project's root directory and deploys as plain files (no build step) on every push to `main`. DNS is a CNAME per subdomain in the Hostinger zone for pxlvzn.in, the same as `dwn`.
 
